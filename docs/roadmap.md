@@ -16,7 +16,7 @@ The v0.1 scope comes from the project brief. Anything outside it waits under "La
 | Retrieval strategies: pre-filter, post-filter, iterative, cached pre-filter, plus the gated unfiltered baseline | Done. Every strategy × engine × index is leak-free in `tests/integration/test_leak_matrix.py`. An adaptive strategy was built, measured and rejected (ADR-0004) |
 | GitHub connector, with webhooks and signature verification | Done. Validated on a real org: 224/224 pairs agree with GitHub (2026-10-29). Webhooks and nested teams tested against the fake API |
 | Google Drive connector (shared drives, limited access, link-only, metadata-only, expirations, Directory nesting incl. `CUSTOMER`, Changes API) | Done against a fake API. Not yet run against a real tenant |
-| Confluence connector (all three space-access modes, intersective restrictions, folders as parents, access classes fail closed, CQL changes) | Done. Validated on a real Free-plan site: 0 over-grants on 156 pairs. View restrictions tested against the fake API only |
+| Confluence connector (all three space-access modes, intersective restrictions, folders as parents, access classes fail closed, CQL changes) | Done. Validated on a real site, including nested view restrictions and a restricted folder: 46/46 user × page verdicts match Confluence |
 | Sync engine (per-object diff, tuples before chunks, reconcile plus guarded sweep, expiry sweep, lag samples) | Done |
 | Incremental sync per source (ADR-0005) | Done: GitHub webhooks, Drive Changes API (items and drive membership), Confluence CQL. Gaps documented |
 | Audit record per decision, with the calling application | Done |
@@ -41,12 +41,11 @@ Closed on 2026-10-29:
 
 - **Streamed ListObjects deadline behaviour.** It ends silently with HTTP 200 and no error line. `list_deadline_s` must match the server (docs/research/2026-10-29-list-deadlines.md).
 - **GitHub connector on a real org.** All 224 person × repository pairs matched GitHub's own permission endpoint (docs/research/2026-10-29-github-real-org.md).
-- **Confluence connector on a real site (Free plan).** 0 over-grants on 156 pairs. Fixed the e-mail lookup that real sites refuse. Root-page ids confirmed (docs/research/2026-10-29-confluence-real-site.md). View restrictions could not be tested on the Free plan.
+- **Confluence connector on a real site.** On a Standard trial with a second, ordinary user and nested view restrictions, both people matched Confluence on all 23 pages, and the `all-licensed-users` stand-in was confirmed. Fixed the e-mail lookup that real sites refuse. Root-page ids confirmed (docs/research/2026-10-29-confluence-real-site.md).
 
 Still open:
 
 - **Drive against a real tenant.** It is tested only against a fake API built from the documented response shapes.
-- **Confluence view restrictions against a real site.** This needs a Standard-plan site with two or more users; the Free plan forbids permission changes.
 - **GitHub nested teams and webhooks** are still tested only against the fake API.
 - **GitHub repo teams.** Find out whether `GET /repos/{o}/{r}/teams` lists child teams that inherit access. We model nesting ourselves either way.
 

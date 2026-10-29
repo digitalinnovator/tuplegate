@@ -30,6 +30,7 @@ from tuplegate import ids
 from tuplegate.authz.base import Consistency
 from tuplegate.authz.openfga import OpenFGABackend
 from tuplegate.connectors.confluence import ConfluenceConnector
+from tuplegate.identity import MappingResolver
 from tuplegate.model import GroupMembers, UpsertGroup, UpsertNode, group, user
 from tuplegate.sync import SyncEngine
 
@@ -73,8 +74,36 @@ def main() -> int:
         cls, _, name = spec.partition("=")
         stand_in[cls] = groups[name]
 
+    accounts: set[str] = set()
+    # Every licensed person (members of any group) plus accounts with direct space roles.
+    for gid in groups.values():
+        rows = c.get(f"/wiki/rest/api/group/{gid}/membersByGroupId").json()["results"]
+        accounts |= {r["accountId"] for r in rows if r.get("accountType") == "atlassian"}
+    for sp in c.get("/wiki/api/v2/spaces", params={"limit": 250}).json()["results"]:
+        for a in c.get(f"/wiki/api/v2/spaces/{sp['id']}/role-assignments").json()["results"]:
+            if a["principal"]["principalType"] == "USER":
+                accounts.add(a["principal"]["principalId"])
+    canonical: dict[str, str] = {}  # account -> the id our engine is asked about
+    kinds: dict[str, str] = {}
+    hidden: dict[str, str] = {}
+    for acct in accounts:
+        u = c.get("/wiki/rest/api/user", params={"accountId": acct}).json()
+        if u.get("email"):
+            canonical[acct], kinds[acct] = u["email"].lower(), "user_by_email"
+        elif u.get("accountType") == "atlassian":
+            # A person whose profile hides the e-mail: what an identity map is for.
+            hidden[acct] = canonical[acct] = f"{acct}@identity-map.validate.test"
+            kinds[acct] = "user_by_identity_map"
+        else:
+            kinds[acct] = "app_account"  # unmapped, unclaimable by design
+
     conn = ConfluenceConnector(
-        base, email=auth[0], api_token=auth[1], access_class_groups=stand_in, include_content=False
+        base,
+        email=auth[0],
+        api_token=auth[1],
+        identity=MappingResolver({"confluence": hidden}),
+        access_class_groups=stand_in,
+        include_content=False,
     )
     events = list(conn.snapshot())
     pages = [e.acl.ref for e in events if isinstance(e, UpsertNode) and e.acl.ref.type == "doc"]
@@ -96,16 +125,6 @@ def main() -> int:
             print("sync errors:", rep.errors[:5])
             return 2
 
-        accounts = set()
-        for sp in c.get("/wiki/api/v2/spaces", params={"limit": 250}).json()["results"]:
-            for a in c.get(f"/wiki/api/v2/spaces/{sp['id']}/role-assignments").json()["results"]:
-                if a["principal"]["principalType"] == "USER":
-                    accounts.add(a["principal"]["principalId"])
-        emails = {}
-        for acct in accounts:
-            email = c.get("/wiki/rest/api/user", params={"accountId": acct}).json().get("email")
-            if email:
-                emails[acct] = email.lower()
         counts: Counter[str] = Counter()
         mismatches: list[dict[str, Any]] = []
         acl_ids = [ids.encode(p.id) for p in pages]
@@ -134,15 +153,9 @@ def main() -> int:
                     )
 
         for acct in sorted(accounts):
-            email = emails.get(acct)
-            # Accounts without an e-mail (apps, bots) are unmapped: unclaimable by design.
-            ours = fga.check_docs(email, acl_ids, Consistency.FULL) if email else None
-            compare(
-                "user_mapped" if email else "user_unmapped",
-                {"type": "user", "identifier": acct},
-                ours,
-                "mapped user" if email else "app account",
-            )
+            who = canonical.get(acct)
+            ours = fga.check_docs(who, acl_ids, Consistency.FULL) if who else None
+            compare(kinds[acct], {"type": "user", "identifier": acct}, ours, kinds[acct])
         for name, gid in sorted(groups.items()):
             ours = fga.check_docs(probes[gid], acl_ids, Consistency.FULL)
             compare("group", {"type": "group", "identifier": gid}, ours, name)
@@ -160,7 +173,7 @@ def main() -> int:
                     "unmapped_access_classes": conn.stats.unmapped_access_classes,
                     "unmapped_principals": conn.stats.unmapped_principals,
                     "accounts": len(accounts),
-                    "accounts_with_email": len(emails),
+                    "accounts_by_kind": dict(Counter(kinds.values())),
                     **dict(counts),
                 },
                 indent=2,

@@ -17,5 +17,5 @@ First release. Everything below is new. The project was developed under the work
 - **Integrations:** LangChain and LlamaIndex retrievers bound to one subject.
 - **Validation:**
   - The GitHub connector matched GitHub's own permission endpoint on all 224 person × repository pairs of a real organisation (`scripts/validate_github.py`).
-  - The Confluence connector had 0 over-grants on 156 pairs against Confluence's permission check on a real site (`scripts/validate_confluence.py`). That run found, and this release fixes, an e-mail lookup that real sites refuse.
+  - The Confluence connector matched Confluence's permission check on every page for two real people on a real site with nested view restrictions (`scripts/confluence_fixture.py`, `scripts/validate_confluence.py`). Validation found, and this release fixes, an e-mail lookup that real sites refuse.
 - **Benchmarks:** filtering strategies under skew, revocation lag and revoke cost, sidecar overhead. All committed with their results.
