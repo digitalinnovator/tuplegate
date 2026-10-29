@@ -1,0 +1,27 @@
+definition user {}
+
+definition group {
+    relation member: user | group#member
+}
+
+definition container {
+    relation parent: container
+    relation viewer: user | user:* | group#member
+    relation restricted: user:*
+    relation restriction_member: user | group#member
+    permission granted = viewer + parent->granted
+    permission blocked_here = restricted - restriction_member
+    permission blocked = blocked_here + parent->blocked
+    permission can_view = granted - blocked
+}
+
+definition doc {
+    relation parent: container
+    relation viewer: user | user:* | group#member
+    relation restricted: user:*
+    relation restriction_member: user | group#member
+    permission granted = viewer + parent->granted
+    permission blocked_here = restricted - restriction_member
+    permission blocked = blocked_here + parent->blocked
+    permission can_view = granted - blocked
+}

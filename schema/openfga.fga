@@ -1,0 +1,30 @@
+model
+  schema 1.1
+
+type user
+
+type group
+  relations
+    define member: [user, group#member]
+
+type container
+  relations
+    define parent: [container]
+    define viewer: [user, user:*, group#member]
+    define restricted: [user:*]
+    define restriction_member: [user, group#member]
+    define granted: viewer or granted from parent
+    define blocked_here: restricted but not restriction_member
+    define blocked: blocked_here or blocked from parent
+    define can_view: granted but not blocked
+
+type doc
+  relations
+    define parent: [container]
+    define viewer: [user, user:*, group#member]
+    define restricted: [user:*]
+    define restriction_member: [user, group#member]
+    define granted: viewer or granted from parent
+    define blocked_here: restricted but not restriction_member
+    define blocked: blocked_here or blocked from parent
+    define can_view: granted but not blocked

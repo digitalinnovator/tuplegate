@@ -1,0 +1,52 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: lint, types, unit tests (py${{ matrix.python }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          python-version: ${{ matrix.python }}
+      - run: uv sync --frozen --all-extras
+      - run: uv run ruff check src tests benchmarks examples scripts
+      - run: uv run ruff format --check src tests benchmarks examples scripts
+      - run: uv run mypy
+      # Includes the in-memory leak-rate tests: every strategy must be leak-free.
+      - run: uv run pytest
+
+  integration:
+    # Every engine and index from the pinned Compose file: differential tests of OpenFGA and
+    # SpiceDB against the oracle, the vertical slice, and the engine x index x strategy leak
+    # matrix. No secrets needed.
+    name: integration (openfga, spicedb, pgvector, qdrant)
+    runs-on: ubuntu-24.04
+    needs: check
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          python-version: "3.12"
+      - run: uv sync --frozen --all-extras
+      - run: docker compose -f deploy/compose.yaml --profile full up -d --wait
+      # SpiceDB tests share one instance and clear it between tests: keep them serial.
+      - run: uv run pytest -m integration -v
+      - if: failure()
+        run: docker compose -f deploy/compose.yaml logs --no-color | tail -200

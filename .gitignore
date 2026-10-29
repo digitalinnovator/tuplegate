@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+dist/
+build/
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.hypothesis/
+.coverage
+htmlcov/
+
+# Local state
+*.sqlite
+*.db
+*.sqlite3
+.rag-authz/
+benchmarks/results/*.scratch.json
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+benchmarks/logs/

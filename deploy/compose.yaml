@@ -1,0 +1,99 @@
+# Local development and benchmark services. Every image is pinned by version and digest
+# (ADR-0001). Ports bind to 127.0.0.1 only. Credentials here are dev-only placeholders for a
+# throwaway local stack; never reuse them.
+#
+#   make up        postgres (pgvector) + openfga        — the vertical slice
+#   make up-full   adds spicedb + qdrant                — every backend
+name: rag-authz
+
+x-pg-dsn: &openfga_dsn postgres://rag:rag-dev-only@postgres:5432/openfga?sslmode=disable
+
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.6-pg17@sha256:cf134a767f474095eeba57e0117be8e568e011a63f33fbf252f14c9b760f8e6f
+    environment:
+      POSTGRES_USER: rag
+      POSTGRES_PASSWORD: rag-dev-only
+      POSTGRES_DB: rag
+    # SpiceDB's Postgres datastore requires commit timestamps.
+    command: ["postgres", "-c", "track_commit_timestamp=on", "-c", "max_connections=200"]
+    ports: ["127.0.0.1:55432:5432"]
+    volumes:
+      - ./postgres-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rag -d rag"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  openfga-migrate:
+    image: openfga/openfga:v1.21.0@sha256:2113c664a486b5da8d7a2cdab479e0d4e30639c80fd2c000540f645c1dbc1e55
+    command: migrate
+    environment:
+      OPENFGA_DATASTORE_ENGINE: postgres
+      OPENFGA_DATASTORE_URI: *openfga_dsn
+    depends_on:
+      postgres: { condition: service_healthy }
+
+  openfga:
+    image: openfga/openfga:v1.21.0@sha256:2113c664a486b5da8d7a2cdab479e0d4e30639c80fd2c000540f645c1dbc1e55
+    command: run
+    environment:
+      OPENFGA_DATASTORE_ENGINE: postgres
+      OPENFGA_DATASTORE_URI: *openfga_dsn
+      OPENFGA_PLAYGROUND_ENABLED: "false"
+      OPENFGA_LOG_FORMAT: json
+      # Explicit so benchmark results name them; these are the documented defaults.
+      OPENFGA_LIST_OBJECTS_DEADLINE: 3s
+      OPENFGA_MAX_TUPLES_PER_WRITE: "100"
+      OPENFGA_MAX_CHECKS_PER_BATCH_CHECK: "50"
+    ports: ["127.0.0.1:58080:8080"]
+    depends_on:
+      openfga-migrate: { condition: service_completed_successfully }
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/grpc_health_probe", "-addr=127.0.0.1:8081"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  spicedb-migrate:
+    profiles: [full]
+    image: authzed/spicedb:v1.56.2@sha256:aa96009a0477f8a759149823407d47ad16d1a74390bae3102b3b0b7143502764
+    command: >-
+      datastore migrate head
+      --datastore-engine=postgres
+      --datastore-conn-uri=postgres://rag:rag-dev-only@postgres:5432/spicedb?sslmode=disable
+    depends_on:
+      postgres: { condition: service_healthy }
+
+  spicedb:
+    profiles: [full]
+    image: authzed/spicedb:v1.56.2@sha256:aa96009a0477f8a759149823407d47ad16d1a74390bae3102b3b0b7143502764
+    command: >-
+      serve
+      --grpc-preshared-key=rag-dev-only
+      --datastore-engine=postgres
+      --datastore-conn-uri=postgres://rag:rag-dev-only@postgres:5432/spicedb?sslmode=disable
+    ports: ["127.0.0.1:55051:50051"]
+    depends_on:
+      spicedb-migrate: { condition: service_completed_successfully }
+    healthcheck:
+      test: ["CMD", "grpc_health_probe", "-addr=localhost:50051"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  qdrant:
+    profiles: [full]
+    image: qdrant/qdrant:v1.19.1@sha256:12364fe851b9f17356fc88189fc06d1b521262e04659ec7345975b00c9246a10
+    ports: ["127.0.0.1:56333:6333", "127.0.0.1:56334:6334"]
+    healthcheck:
+      # The image has bash but no curl or wget.
+      test:
+        - CMD
+        - bash
+        - -c
+        - exec 3<>/dev/tcp/127.0.0.1/6333 && printf 'GET /readyz HTTP/1.0\r\n\r\n' >&3 && grep -q ' 200 ' <&3
+      interval: 2s
+      timeout: 3s
+      retries: 30

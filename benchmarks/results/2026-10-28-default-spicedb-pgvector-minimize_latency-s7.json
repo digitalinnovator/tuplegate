@@ -1,0 +1,261 @@
+{
+  "benchmark": "filter_strategies",
+  "created_at": "2026-10-28T12:14:56+00:00",
+  "git_commit": null,
+  "package_version": "0.1.0.dev0",
+  "python": "3.12.13",
+  "platform": "macOS-15.7.4-x86_64-i386-64bit",
+  "machine": "x86_64",
+  "cpu_count": 12,
+  "preset": "default",
+  "args": {
+    "preset": "default",
+    "seed": "None",
+    "backend": "spicedb",
+    "index": "pgvector",
+    "acorn": "False",
+    "strategies": "post_filter,pre_filter",
+    "list_cache_ttl": "60.0",
+    "keep": "False",
+    "tag": "s7",
+    "iterative_scan": "relaxed_order",
+    "k": "10",
+    "overfetch": "4",
+    "max_candidates": "1000",
+    "consistency": "minimize_latency",
+    "warmup": "20",
+    "out_dir": "benchmarks/results"
+  },
+  "org_stats": {
+    "spec": {
+      "seed": 7,
+      "users": 2000,
+      "groups": 200,
+      "group_size_alpha": 1.1,
+      "largest_group_fraction": 0.4,
+      "min_group_size": 3,
+      "membership_alpha": 0.8,
+      "nested_group_fraction": 0.25,
+      "roots": 80,
+      "folders_per_root": 6.0,
+      "max_folder_depth": 5,
+      "docs": 10000,
+      "max_chunks_per_doc": 3,
+      "dim": 64,
+      "topics": 100,
+      "topics_per_root": 2,
+      "acl_topic_correlation": 0.85,
+      "topic_noise": 0.8,
+      "company_wide_roots": 3,
+      "company_wide_doc_share": 0.02,
+      "p_company_wide_public": 0.3,
+      "doc_placement_alpha": 0.6,
+      "p_extra_group_grant": 0.25,
+      "p_doc_user_share": 0.05,
+      "p_doc_public": 0.003,
+      "p_inheritance_break": 0.03,
+      "p_restriction": 0.03,
+      "queries": 500,
+      "p_out_of_scope_query": 0.5,
+      "probe_sampling": "uniform"
+    },
+    "tuples": 18767,
+    "chunks": 20041,
+    "group_size_max": 800,
+    "group_size_median": 5.0,
+    "groups_per_user_p50": 1.0,
+    "groups_per_user_max": 59,
+    "nested_edges": 51,
+    "containers": 590,
+    "inheritance_breaks": 343,
+    "restrictions": 319,
+    "selectivity_p10": 0.0184,
+    "selectivity_p50": 0.0281,
+    "selectivity_p90": 0.0574,
+    "selectivity_max": 0.4359
+  },
+  "backend": {
+    "backend": "spicedb",
+    "load_s": 2.87
+  },
+  "index": {
+    "index": "pgvector",
+    "iterative_scan": "relaxed_order",
+    "acorn": null,
+    "load_s": 24.38
+  },
+  "retrieval_config": {
+    "strategy": "pre_filter",
+    "consistency": "minimize_latency",
+    "overfetch": "4",
+    "max_candidates": "1000",
+    "list_cache_ttl_s": "60.0",
+    "list_cache_max_subjects": "10000",
+    "allow_unfiltered": "True"
+  },
+  "latency_meaningful": true,
+  "results": [
+    {
+      "label": "post_filter",
+      "k": 10,
+      "overall": {
+        "probes": 500,
+        "results": 1709,
+        "leaked_results": 0,
+        "result_leak_rate": 0.0,
+        "query_leak_rate": 0.0,
+        "recall_mean": 0.3412,
+        "short_rate": 0.828,
+        "latency_p50_ms": 16.86801550386008,
+        "latency_p95_ms": 23.042588053795043,
+        "latency_p99_ms": 28.81015427519742
+      },
+      "by_bucket": {
+        "1-5%": {
+          "probes": 438,
+          "results": 1427,
+          "leaked_results": 0,
+          "result_leak_rate": 0.0,
+          "query_leak_rate": 0.0,
+          "recall_mean": 0.3253424657534247,
+          "short_rate": 0.8470319634703196,
+          "latency_p50_ms": 16.822191999381175,
+          "latency_p95_ms": 22.64967439805332,
+          "latency_p99_ms": 28.367718278605025
+        },
+        "5-20%": {
+          "probes": 59,
+          "results": 262,
+          "leaked_results": 0,
+          "result_leak_rate": 0.0,
+          "query_leak_rate": 0.0,
+          "recall_mean": 0.4423728813559322,
+          "short_rate": 0.711864406779661,
+          "latency_p50_ms": 16.936136002186686,
+          "latency_p95_ms": 28.36626400530804,
+          "latency_p99_ms": 34.610611560347024
+        },
+        "20-50%": {
+          "probes": 3,
+          "results": 20,
+          "leaked_results": 0,
+          "result_leak_rate": 0.0,
+          "query_leak_rate": 0.0,
+          "recall_mean": 0.6666666666666666,
+          "short_rate": 0.3333333333333333,
+          "latency_p50_ms": 17.704900004900992,
+          "latency_p95_ms": 24.36551920036436,
+          "latency_p99_ms": 24.957574239961104
+        }
+      },
+      "by_intent": {
+        "in_scope": {
+          "probes": 245,
+          "results": 1447,
+          "leaked_results": 0,
+          "result_leak_rate": 0.0,
+          "query_leak_rate": 0.0,
+          "recall_mean": 0.590204081632653,
+          "short_rate": 0.6775510204081633,
+          "latency_p50_ms": 16.60872199863661,
+          "latency_p95_ms": 22.563042798719835,
+          "latency_p99_ms": 32.248590877861716
+        },
+        "out_of_scope": {
+          "probes": 255,
+          "results": 262,
+          "leaked_results": 0,
+          "result_leak_rate": 0.0,
+          "query_leak_rate": 0.0,
+          "recall_mean": 0.10196078431372549,
+          "short_rate": 0.9725490196078431,
+          "latency_p50_ms": 17.133295004896354,
+          "latency_p95_ms": 23.402556500514038,
+          "latency_p99_ms": 28.791209296905436
+        }
+      },
+      "errors": 0
+    },
+    {
+      "label": "pre_filter",
+      "k": 10,
+      "overall": {
+        "probes": 500,
+        "results": 5000,
+        "leaked_results": 0,
+        "result_leak_rate": 0.0,
+        "query_leak_rate": 0.0,
+        "recall_mean": 1.0,
+        "short_rate": 0.0,
+        "latency_p50_ms": 86.88022949718288,
+        "latency_p95_ms": 230.11643454701698,
+        "latency_p99_ms": 368.06468879804015
+      },
+      "by_bucket": {
+        "1-5%": {
+          "probes": 438,
+          "results": 4380,
+          "leaked_results": 0,
+          "result_leak_rate": 0.0,
+          "query_leak_rate": 0.0,
+          "recall_mean": 1.0,
+          "short_rate": 0.0,
+          "latency_p50_ms": 81.42931849943125,
+          "latency_p95_ms": 164.18356880021747,
+          "latency_p99_ms": 245.81478889929713
+        },
+        "5-20%": {
+          "probes": 59,
+          "results": 590,
+          "leaked_results": 0,
+          "result_leak_rate": 0.0,
+          "query_leak_rate": 0.0,
+          "recall_mean": 1.0,
+          "short_rate": 0.0,
+          "latency_p50_ms": 182.0441150048282,
+          "latency_p95_ms": 347.85047990080784,
+          "latency_p99_ms": 481.89188532182015
+        },
+        "20-50%": {
+          "probes": 3,
+          "results": 30,
+          "leaked_results": 0,
+          "result_leak_rate": 0.0,
+          "query_leak_rate": 0.0,
+          "recall_mean": 1.0,
+          "short_rate": 0.0,
+          "latency_p50_ms": 1266.9280439949944,
+          "latency_p95_ms": 1389.3769626010908,
+          "latency_p99_ms": 1400.2613109216327
+        }
+      },
+      "by_intent": {
+        "in_scope": {
+          "probes": 245,
+          "results": 2450,
+          "leaked_results": 0,
+          "result_leak_rate": 0.0,
+          "query_leak_rate": 0.0,
+          "recall_mean": 1.0,
+          "short_rate": 0.0,
+          "latency_p50_ms": 85.34504399722209,
+          "latency_p95_ms": 200.83330500056036,
+          "latency_p99_ms": 328.651396483765
+        },
+        "out_of_scope": {
+          "probes": 255,
+          "results": 2550,
+          "leaked_results": 0,
+          "result_leak_rate": 0.0,
+          "query_leak_rate": 0.0,
+          "recall_mean": 1.0,
+          "short_rate": 0.0,
+          "latency_p50_ms": 87.35038599843392,
+          "latency_p95_ms": 239.67344060074538,
+          "latency_p99_ms": 412.80637980089523
+        }
+      },
+      "errors": 0
+    }
+  ]
+}

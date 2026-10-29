@@ -1,0 +1,574 @@
+{
+  "benchmark": "revocation_lag",
+  "created_at": "2026-10-28T12:43:57+00:00",
+  "package_version": "0.1.0.dev0",
+  "python": "3.12.13",
+  "platform": "macOS-15.7.4-x86_64-i386-64bit",
+  "cpu_count": 12,
+  "args": {
+    "engines": "['openfga', 'spicedb']",
+    "consistency": "['full', 'at_least_as_fresh', 'minimize_latency']",
+    "strategies": "['pre_filter', 'post_filter', 'cached_pre_filter']",
+    "trials": "20",
+    "poll_ms": "50.0",
+    "timeout_s": "15.0",
+    "subtree_sizes": "[10, 1000, 10000]",
+    "out_dir": "benchmarks/results"
+  },
+  "enforcement": [
+    {
+      "engine": "openfga",
+      "consistency": "full",
+      "strategy": "pre_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 7.73,
+        "p95": 11.83,
+        "max": 12.36
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 7.73,
+        "p95": 11.83,
+        "max": 12.36
+      },
+      "trials_with_leaks": 0,
+      "leaked_responses": 0,
+      "timeouts": 0
+    },
+    {
+      "engine": "openfga",
+      "consistency": "full",
+      "strategy": "post_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 8.7,
+        "p95": 10.36,
+        "max": 11.66
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 8.7,
+        "p95": 10.36,
+        "max": 11.66
+      },
+      "trials_with_leaks": 0,
+      "leaked_responses": 0,
+      "timeouts": 0
+    },
+    {
+      "engine": "openfga",
+      "consistency": "full",
+      "strategy": "cached_pre_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 8.15,
+        "p95": 12.72,
+        "max": 13.19
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 8.15,
+        "p95": 12.72,
+        "max": 13.19
+      },
+      "trials_with_leaks": 0,
+      "leaked_responses": 0,
+      "timeouts": 0
+    },
+    {
+      "engine": "openfga",
+      "consistency": "at_least_as_fresh",
+      "strategy": "pre_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 7.9,
+        "p95": 10.44,
+        "max": 10.63
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 7.9,
+        "p95": 10.44,
+        "max": 10.63
+      },
+      "trials_with_leaks": 0,
+      "leaked_responses": 0,
+      "timeouts": 0
+    },
+    {
+      "engine": "openfga",
+      "consistency": "at_least_as_fresh",
+      "strategy": "post_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 8.47,
+        "p95": 9.53,
+        "max": 14.04
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 8.47,
+        "p95": 9.53,
+        "max": 14.04
+      },
+      "trials_with_leaks": 0,
+      "leaked_responses": 0,
+      "timeouts": 0
+    },
+    {
+      "engine": "openfga",
+      "consistency": "at_least_as_fresh",
+      "strategy": "cached_pre_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 7.45,
+        "p95": 11.2,
+        "max": 12.8
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 7.45,
+        "p95": 11.2,
+        "max": 12.8
+      },
+      "trials_with_leaks": 0,
+      "leaked_responses": 0,
+      "timeouts": 0
+    },
+    {
+      "engine": "openfga",
+      "consistency": "minimize_latency",
+      "strategy": "pre_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 7.04,
+        "p95": 8.83,
+        "max": 9.66
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 7.04,
+        "p95": 8.83,
+        "max": 9.66
+      },
+      "trials_with_leaks": 0,
+      "leaked_responses": 0,
+      "timeouts": 0
+    },
+    {
+      "engine": "openfga",
+      "consistency": "minimize_latency",
+      "strategy": "post_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 8.09,
+        "p95": 9.86,
+        "max": 11.56
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 8.09,
+        "p95": 9.86,
+        "max": 11.56
+      },
+      "trials_with_leaks": 0,
+      "leaked_responses": 0,
+      "timeouts": 0
+    },
+    {
+      "engine": "openfga",
+      "consistency": "minimize_latency",
+      "strategy": "cached_pre_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 7.34,
+        "p95": 8.48,
+        "max": 12.52
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 7.34,
+        "p95": 8.48,
+        "max": 12.52
+      },
+      "trials_with_leaks": 0,
+      "leaked_responses": 0,
+      "timeouts": 0
+    },
+    {
+      "engine": "spicedb",
+      "consistency": "full",
+      "strategy": "pre_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 7.38,
+        "p95": 8.85,
+        "max": 11.04
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 7.38,
+        "p95": 8.85,
+        "max": 11.04
+      },
+      "trials_with_leaks": 0,
+      "leaked_responses": 0,
+      "timeouts": 0
+    },
+    {
+      "engine": "spicedb",
+      "consistency": "full",
+      "strategy": "post_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 7.33,
+        "p95": 9.7,
+        "max": 11.11
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 7.33,
+        "p95": 9.7,
+        "max": 11.11
+      },
+      "trials_with_leaks": 0,
+      "leaked_responses": 0,
+      "timeouts": 0
+    },
+    {
+      "engine": "spicedb",
+      "consistency": "full",
+      "strategy": "cached_pre_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 7.46,
+        "p95": 14.06,
+        "max": 78.18
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 7.46,
+        "p95": 14.06,
+        "max": 78.18
+      },
+      "trials_with_leaks": 0,
+      "leaked_responses": 0,
+      "timeouts": 0
+    },
+    {
+      "engine": "spicedb",
+      "consistency": "at_least_as_fresh",
+      "strategy": "pre_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 8.54,
+        "p95": 12.97,
+        "max": 14.02
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 8.54,
+        "p95": 12.97,
+        "max": 14.02
+      },
+      "trials_with_leaks": 0,
+      "leaked_responses": 0,
+      "timeouts": 0
+    },
+    {
+      "engine": "spicedb",
+      "consistency": "at_least_as_fresh",
+      "strategy": "post_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 8.39,
+        "p95": 10.61,
+        "max": 10.83
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 8.39,
+        "p95": 10.61,
+        "max": 10.83
+      },
+      "trials_with_leaks": 0,
+      "leaked_responses": 0,
+      "timeouts": 0
+    },
+    {
+      "engine": "spicedb",
+      "consistency": "at_least_as_fresh",
+      "strategy": "cached_pre_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 9.03,
+        "p95": 14.26,
+        "max": 15.81
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 9.03,
+        "p95": 14.26,
+        "max": 15.81
+      },
+      "trials_with_leaks": 0,
+      "leaked_responses": 0,
+      "timeouts": 0
+    },
+    {
+      "engine": "spicedb",
+      "consistency": "minimize_latency",
+      "strategy": "pre_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 8.05,
+        "p95": 11.91,
+        "max": 20.08
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 58.59,
+        "p95": 4903.69,
+        "max": 4930.9
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 67.41,
+        "p95": 4911.94,
+        "max": 4938.8
+      },
+      "trials_with_leaks": 12,
+      "leaked_responses": 420,
+      "timeouts": 0
+    },
+    {
+      "engine": "spicedb",
+      "consistency": "minimize_latency",
+      "strategy": "post_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 7.72,
+        "p95": 9.46,
+        "max": 40.51
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 62.97,
+        "p95": 4815.97,
+        "max": 4898.56
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 71.33,
+        "p95": 4824.79,
+        "max": 4904.57
+      },
+      "trials_with_leaks": 11,
+      "leaked_responses": 338,
+      "timeouts": 0
+    },
+    {
+      "engine": "spicedb",
+      "consistency": "minimize_latency",
+      "strategy": "cached_pre_filter",
+      "sidecar_lag_ms": {
+        "n": 20,
+        "p50": 7.9,
+        "p95": 12.03,
+        "max": 13.72
+      },
+      "enforcement_lag_ms": {
+        "n": 20,
+        "p50": 155.96,
+        "p95": 4826.34,
+        "max": 4874.47
+      },
+      "total_lag_ms": {
+        "n": 20,
+        "p50": 166.39,
+        "p95": 4832.85,
+        "max": 4882.38
+      },
+      "trials_with_leaks": 15,
+      "leaked_responses": 659,
+      "timeouts": 0
+    }
+  ],
+  "revoke_cost": [
+    {
+      "engine": "openfga",
+      "docs_below": 10,
+      "model": "structured",
+      "tuples_written": 1,
+      "write_ms": 4.6
+    },
+    {
+      "engine": "openfga",
+      "docs_below": 10,
+      "model": "flattened",
+      "tuples_written": 10,
+      "write_ms": 5.7
+    },
+    {
+      "engine": "openfga",
+      "docs_below": 1000,
+      "model": "structured",
+      "tuples_written": 1,
+      "write_ms": 4.1
+    },
+    {
+      "engine": "openfga",
+      "docs_below": 1000,
+      "model": "flattened",
+      "tuples_written": 1000,
+      "write_ms": 183.3
+    },
+    {
+      "engine": "openfga",
+      "docs_below": 10000,
+      "model": "structured",
+      "tuples_written": 1,
+      "write_ms": 4.6
+    },
+    {
+      "engine": "openfga",
+      "docs_below": 10000,
+      "model": "flattened",
+      "tuples_written": 10000,
+      "write_ms": 4779.7
+    },
+    {
+      "engine": "spicedb",
+      "docs_below": 10,
+      "model": "structured",
+      "tuples_written": 1,
+      "write_ms": 4.0
+    },
+    {
+      "engine": "spicedb",
+      "docs_below": 10,
+      "model": "flattened",
+      "tuples_written": 10,
+      "write_ms": 4.5
+    },
+    {
+      "engine": "spicedb",
+      "docs_below": 1000,
+      "model": "structured",
+      "tuples_written": 1,
+      "write_ms": 4.5
+    },
+    {
+      "engine": "spicedb",
+      "docs_below": 1000,
+      "model": "flattened",
+      "tuples_written": 1000,
+      "write_ms": 139.8
+    },
+    {
+      "engine": "spicedb",
+      "docs_below": 10000,
+      "model": "structured",
+      "tuples_written": 1,
+      "write_ms": 6.8
+    },
+    {
+      "engine": "spicedb",
+      "docs_below": 10000,
+      "model": "flattened",
+      "tuples_written": 10000,
+      "write_ms": 3502.7
+    }
+  ]
+}
