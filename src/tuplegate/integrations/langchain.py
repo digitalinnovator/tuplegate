@@ -1,4 +1,4 @@
-"""LangChain retriever bound to one subject (``pip install rag-authz[langchain]``).
+"""LangChain retriever bound to one subject (``pip install tuplegate[langchain]``).
 
 Build one per request with ``for_subject``; never share a retriever across users.
 
@@ -16,8 +16,8 @@ from langchain_core.embeddings import Embeddings
 from langchain_core.retrievers import BaseRetriever
 from pydantic import ConfigDict
 
-from rag_authz.authz.base import validate_subject
-from rag_authz.retrieval import AuthorizedRetriever, Strategy
+from tuplegate.authz.base import validate_subject
+from tuplegate.retrieval import AuthorizedRetriever, Strategy
 
 
 class AuthzRetriever(BaseRetriever):

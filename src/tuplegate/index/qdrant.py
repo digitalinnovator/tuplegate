@@ -22,8 +22,8 @@ from typing import Any
 
 import httpx
 
-from rag_authz import ids
-from rag_authz.index.base import ChunkRecord, Hit
+from tuplegate import ids
+from tuplegate.index.base import ChunkRecord, Hit
 
 _NAME = re.compile(r"^[a-zA-Z0-9_\-]{1,255}$")
 # Stable point ids: Qdrant accepts only unsigned ints or UUIDs.

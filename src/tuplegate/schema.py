@@ -11,7 +11,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from rag_authz.model import CAN_VIEW, ObjectType, Relation
+from tuplegate.model import CAN_VIEW, ObjectType, Relation
 
 # --- A small expression IR covering the userset rewrites we use -----------------------------
 

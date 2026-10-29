@@ -1,4 +1,4 @@
-"""LlamaIndex retriever bound to one subject (``pip install rag-authz[llamaindex]``).
+"""LlamaIndex retriever bound to one subject (``pip install tuplegate[llamaindex]``).
 
 Build one per request; never share a retriever across users.
 
@@ -17,8 +17,8 @@ from llama_index.core.base.base_retriever import BaseRetriever
 from llama_index.core.base.embeddings.base import BaseEmbedding
 from llama_index.core.schema import NodeWithScore, QueryBundle, TextNode
 
-from rag_authz.authz.base import validate_subject
-from rag_authz.retrieval import AuthorizedRetriever, Strategy
+from tuplegate.authz.base import validate_subject
+from tuplegate.retrieval import AuthorizedRetriever, Strategy
 
 
 class AuthzLlamaRetriever(BaseRetriever):

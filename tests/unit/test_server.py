@@ -5,16 +5,16 @@ from collections.abc import Sequence
 import pytest
 from fastapi.testclient import TestClient
 
-from rag_authz.audit import MemoryAuditSink
-from rag_authz.authz.base import AuthzError, Consistency, ListResult
-from rag_authz.authz.memory import MemoryBackend
-from rag_authz.config import Settings
-from rag_authz.index.base import ChunkRecord
-from rag_authz.index.memory import MemoryIndex
-from rag_authz.model import NodeAcl, doc, user
-from rag_authz.retrieval import AuthorizedRetriever, RetrievalConfig
-from rag_authz.server import Callers, create_app, hash_token
-from rag_authz.testing import HashingEmbedder
+from tuplegate.audit import MemoryAuditSink
+from tuplegate.authz.base import AuthzError, Consistency, ListResult
+from tuplegate.authz.memory import MemoryBackend
+from tuplegate.config import Settings
+from tuplegate.index.base import ChunkRecord
+from tuplegate.index.memory import MemoryIndex
+from tuplegate.model import NodeAcl, doc, user
+from tuplegate.retrieval import AuthorizedRetriever, RetrievalConfig
+from tuplegate.server import Callers, create_app, hash_token
+from tuplegate.testing import HashingEmbedder
 
 EMB = HashingEmbedder(32)
 TOKEN = "s3cret-token"
@@ -143,10 +143,10 @@ def test_health_endpoints() -> None:
 def test_settings_from_env() -> None:
     s = Settings.from_env(
         {
-            "RAG_AUTHZ_CALLERS": f"chat:{hash_token('t')}",
-            "RAG_AUTHZ_ENGINE": "spicedb",
-            "RAG_AUTHZ_DIM": "384",
-            "RAG_AUTHZ_INDEX": "qdrant",
+            "TUPLEGATE_CALLERS": f"chat:{hash_token('t')}",
+            "TUPLEGATE_ENGINE": "spicedb",
+            "TUPLEGATE_DIM": "384",
+            "TUPLEGATE_INDEX": "qdrant",
             "UNRELATED": "x",
         }
     )

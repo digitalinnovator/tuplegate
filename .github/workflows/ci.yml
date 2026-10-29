@@ -58,5 +58,5 @@ jobs:
     needs: check
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - run: docker build -f deploy/Dockerfile -t rag-authz:ci .
-      - run: docker run --rm --entrypoint rag-authz rag-authz:ci version
+      - run: docker build -f deploy/Dockerfile -t tuplegate:ci .
+      - run: docker run --rm --entrypoint tuplegate tuplegate:ci version

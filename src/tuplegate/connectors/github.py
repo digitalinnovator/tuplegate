@@ -32,9 +32,9 @@ from typing import Any
 
 import httpx
 
-from rag_authz.connectors._http import ConnectorError
-from rag_authz.identity import IdentityResolver, PrincipalMapper
-from rag_authz.model import (
+from tuplegate.connectors._http import ConnectorError
+from tuplegate.identity import IdentityResolver, PrincipalMapper
+from tuplegate.model import (
     DeleteGroup,
     DeleteNode,
     DocumentContent,

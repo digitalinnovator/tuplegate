@@ -16,7 +16,7 @@ htmlcov/
 *.sqlite
 *.db
 *.sqlite3
-.rag-authz/
+.tuplegate/
 benchmarks/results/*.scratch.json
 
 # Secrets

@@ -4,12 +4,12 @@ from datetime import UTC, datetime, timedelta
 
 import pytest
 
-from rag_authz import ids
-from rag_authz.authz.base import Consistency
-from rag_authz.authz.memory import MemoryBackend
-from rag_authz.index.memory import MemoryIndex
-from rag_authz.model import NodeAcl, UpsertNode, doc, user
-from rag_authz.sync import SyncEngine, SyncState
+from tuplegate import ids
+from tuplegate.authz.base import Consistency
+from tuplegate.authz.memory import MemoryBackend
+from tuplegate.index.memory import MemoryIndex
+from tuplegate.model import NodeAcl, UpsertNode, doc, user
+from tuplegate.sync import SyncEngine, SyncState
 
 D = doc("drive/f1")
 A = ids.encode(D.id)
@@ -74,7 +74,7 @@ def test_naive_expiry_is_rejected() -> None:
 
 
 def test_ids_too_long_to_store_readably_sync_idempotently_and_delete() -> None:
-    from rag_authz.model import DeleteNode, container
+    from tuplegate.model import DeleteNode, container
 
     long_doc = doc("github/acme/monorepo/" + "src/main/java/com/acme/" * 12 + "Thing.java")
     assert ids.is_hashed(ids.encode(long_doc.id))

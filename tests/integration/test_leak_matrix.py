@@ -10,11 +10,11 @@ from typing import Any
 
 import pytest
 
-from rag_authz import leakcheck
-from rag_authz.authz.base import AuthzBackend
-from rag_authz.index.base import ChunkRecord, VectorIndex
-from rag_authz.retrieval import AuthorizedRetriever, Strategy
-from rag_authz.synth import OrgSpec, SyntheticTruth, generate
+from tuplegate import leakcheck
+from tuplegate.authz.base import AuthzBackend
+from tuplegate.index.base import ChunkRecord, VectorIndex
+from tuplegate.retrieval import AuthorizedRetriever, Strategy
+from tuplegate.synth import OrgSpec, SyntheticTruth, generate
 
 pytestmark = pytest.mark.integration
 

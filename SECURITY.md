@@ -1,6 +1,6 @@
 # Security policy
 
-rag-authz decides which documents a user may retrieve. A bug that returns a document the source would not show that user is a security vulnerability, and reports are welcome.
+tuplegate decides which documents a user may retrieve. A bug that returns a document the source would not show that user is a security vulnerability, and reports are welcome.
 
 ## Reporting a vulnerability
 
@@ -12,7 +12,7 @@ Include what you found, how to reproduce it (a tuple set, a connector fixture or
 
 In scope:
 
-- **Leaks:** any strategy, engine or index combination returning a hit the oracle (`rag_authz.oracle`) says the subject cannot view.
+- **Leaks:** any strategy, engine or index combination returning a hit the oracle (`tuplegate.oracle`) says the subject cannot view.
 - **Mapping errors** that widen access, where a connector grants more than the source does. Under-granting is a bug, not a vulnerability.
 - **Fail-open paths:** an engine, index or connector error that results in results being returned instead of nothing.
 - **Sidecar authentication:** caller-token checks, subject validation, and reaching the unfiltered baseline over HTTP.

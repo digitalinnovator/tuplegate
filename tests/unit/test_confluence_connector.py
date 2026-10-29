@@ -3,16 +3,16 @@ from __future__ import annotations
 import httpx
 import pytest
 
-from rag_authz import ids
-from rag_authz.authz.base import Consistency
-from rag_authz.authz.memory import MemoryBackend
-from rag_authz.connectors.confluence import ConfluenceConnector, storage_to_text
-from rag_authz.index.memory import MemoryIndex
-from rag_authz.model import Tuple, UpsertGroup, UpsertNode
-from rag_authz.oracle import Oracle
-from rag_authz.sync import SyncEngine
-from rag_authz.testing import HashingEmbedder
 from tests.fakes_confluence import FakeConfluence
+from tuplegate import ids
+from tuplegate.authz.base import Consistency
+from tuplegate.authz.memory import MemoryBackend
+from tuplegate.connectors.confluence import ConfluenceConnector, storage_to_text
+from tuplegate.index.memory import MemoryIndex
+from tuplegate.model import Tuple, UpsertGroup, UpsertNode
+from tuplegate.oracle import Oracle
+from tuplegate.sync import SyncEngine
+from tuplegate.testing import HashingEmbedder
 
 SITE = "https://acme.atlassian.net"
 STAND_IN = {"all-licensed-users": "g-users"}
@@ -85,7 +85,7 @@ def test_pre_roles_mode_reads_space_permissions() -> None:
 
 
 def test_without_email_scope_falls_back_to_identity_map() -> None:
-    from rag_authz.identity import MappingResolver
+    from tuplegate.identity import MappingResolver
 
     fc = FakeConfluence(email_lookup_allowed=False)
     conn = _connector(
@@ -155,7 +155,7 @@ def test_reports_hierarchy_depth() -> None:
 
 
 def test_depth_tracker_handles_chains_and_cycles() -> None:
-    from rag_authz.connectors._tree import DepthTracker
+    from tuplegate.connectors._tree import DepthTracker
 
     t = DepthTracker()
     for i in range(30):
@@ -184,7 +184,7 @@ def test_changes_sync_a_new_parent_folder() -> None:
 
 
 def test_unexpected_restriction_shape_fails_instead_of_opening() -> None:
-    from rag_authz.connectors._http import ConnectorError
+    from tuplegate.connectors._http import ConnectorError
 
     fc = FakeConfluence()
     original = fc._handle

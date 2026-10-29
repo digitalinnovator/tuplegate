@@ -2,16 +2,16 @@ from collections.abc import Collection, Sequence
 
 import pytest
 
-from rag_authz import leakcheck
-from rag_authz.audit import MemoryAuditSink
-from rag_authz.authz.base import AuthzError, Consistency, ListResult
-from rag_authz.authz.memory import MemoryBackend
-from rag_authz.index.base import ChunkRecord, Hit
-from rag_authz.index.exact import ExactIndex
-from rag_authz.index.memory import MemoryIndex
-from rag_authz.model import NodeAcl, Tuple, doc, user
-from rag_authz.retrieval import AuthorizedRetriever, RetrievalConfig, Strategy
-from rag_authz.synth import OrgSpec, SyntheticTruth, generate
+from tuplegate import leakcheck
+from tuplegate.audit import MemoryAuditSink
+from tuplegate.authz.base import AuthzError, Consistency, ListResult
+from tuplegate.authz.memory import MemoryBackend
+from tuplegate.index.base import ChunkRecord, Hit
+from tuplegate.index.exact import ExactIndex
+from tuplegate.index.memory import MemoryIndex
+from tuplegate.model import NodeAcl, Tuple, doc, user
+from tuplegate.retrieval import AuthorizedRetriever, RetrievalConfig, Strategy
+from tuplegate.synth import OrgSpec, SyntheticTruth, generate
 
 SAFE = [
     Strategy.PRE_FILTER,
@@ -163,11 +163,11 @@ def test_invalid_subjects_rejected(bad: str) -> None:
 
 
 def test_cached_pre_filter_never_leaks_a_revoke_and_learns_grants_after_ttl() -> None:
-    from rag_authz.authz.memory import MemoryBackend
-    from rag_authz.index.base import ChunkRecord
-    from rag_authz.index.memory import MemoryIndex
-    from rag_authz.model import NodeAcl, doc, user
-    from rag_authz.retrieval import AuthorizedRetriever, RetrievalConfig
+    from tuplegate.authz.memory import MemoryBackend
+    from tuplegate.index.base import ChunkRecord
+    from tuplegate.index.memory import MemoryIndex
+    from tuplegate.model import NodeAcl, doc, user
+    from tuplegate.retrieval import AuthorizedRetriever, RetrievalConfig
 
     b = MemoryBackend()
     a_acl = NodeAcl(doc("a"), viewers=frozenset({user("u")}))

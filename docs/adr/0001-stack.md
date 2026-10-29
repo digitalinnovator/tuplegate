@@ -19,7 +19,7 @@ Qdrant removed JWT payload filters in 1.16 (docs/research/2026-09-27-engines-and
 | Concern | Choice |
 |---|---|
 | Language | Python 3.12+ (CI tests 3.12 and 3.13) |
-| Shape | A library core (`rag_authz`) plus a thin FastAPI sidecar (`rag_authz.server`, `rag-authz serve`) that exposes the same retrieve call. See "Trust boundary" below |
+| Shape | A library core (`tuplegate`) plus a thin FastAPI sidecar (`tuplegate.server`, `tuplegate serve`) that exposes the same retrieve call. See "Trust boundary" below |
 | Packaging | uv. `uv.lock` pins every environment we run (dev, CI, benchmark, the sidecar image) with hashes, and `exclude-newer` blocks packages published after the pin date |
 | Dependency ranges | Library-style ranges in `pyproject.toml`, because the SDK and retrievers install into users' applications, where exact pins cause resolver conflicts. This differs from the sibling projects, which are applications |
 | Optional extras | `pgvector` (psycopg 3, pgvector-python), `spicedb` (authzed), `server` (FastAPI, uvicorn, opentelemetry-api), `langchain` (langchain-core), `llamaindex` (llama-index-core, which is heavy), `bench` (numpy). Qdrant needs no extra (see the next row). Core depends only on httpx, pydantic and typer |
@@ -31,7 +31,7 @@ Qdrant removed JWT payload filters in 1.16 (docs/research/2026-09-27-engines-and
 | Sync state | SQLite through the stdlib `sqlite3` module, for a single sync worker in v0.1 |
 | CLI | Typer |
 | Logging and audit | Stdlib `logging` for operational logs. A separate `AuditSink` stream carries one JSON record per retrieval decision (ADR-0003) |
-| Tracing | `rag_authz.tracing` opens `opentelemetry-api` spans around retrieve when the API is installed (the `server` extra) and is a no-op otherwise. Never the SDK |
+| Tracing | `tuplegate.tracing` opens `opentelemetry-api` spans around retrieve when the API is installed (the `server` extra) and is a no-op otherwise. Never the SDK |
 | Dev services | Docker Compose with images pinned by version: pgvector 0.8.6 on Postgres 17, Qdrant 1.19.1, OpenFGA 1.21.0 (Postgres datastore), SpiceDB 1.56.2 (Postgres datastore) |
 | Quality gates | ruff (lint and format), mypy `--strict`, pytest with Hypothesis; tests marked `integration` run against Compose |
 | CI | GitHub Actions: lint, types and unit tests on 3.12 and 3.13; an integration job with service containers |
@@ -44,11 +44,11 @@ Enforcement is only as strong as the process that holds the vector-store credent
 - **Sidecar mode (the enforcement boundary).**
   - The sidecar holds the vector-store and engine credentials. The application holds only a sidecar credential, so it cannot query the index unfiltered.
   - The application asserts the end user's identity. v0.1 trusts an authenticated caller to assert the subject; verifying the end user's OIDC token is on the roadmap.
-  - Callers authenticate with bearer tokens. The sidecar stores only SHA-256 digests (`rag-authz hash-token`), compares them in constant time, and writes the caller's name into every audit record.
+  - Callers authenticate with bearer tokens. The sidecar stores only SHA-256 digests (`tuplegate hash-token`), compares them in constant time, and writes the caller's name into every audit record.
   - The unfiltered baseline is not reachable over HTTP, whatever the retriever's configuration.
   - This is the mode for Qdrant after 1.16, and for any team that does not trust every application with direct index access.
 - **Library mode.**
-  - The application imports `rag_authz` and calls the engine and index directly. It is faster, with no extra hop, but the application is inside the trust boundary.
+  - The application imports `tuplegate` and calls the engine and index directly. It is faster, with no extra hop, but the application is inside the trust boundary.
   - It is for trusted services, tests and the benchmark.
 
 ## Consequences

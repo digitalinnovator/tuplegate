@@ -4,7 +4,7 @@ import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
-from rag_authz import ids
+from tuplegate import ids
 
 SPICEDB_ID = re.compile(r"^(([a-zA-Z0-9/_|\-=+]{1,})|\*)$")
 # OpenFGA forbids ':' '#' and whitespace inside ids; the whole "type:id" is capped at 256.
@@ -34,7 +34,7 @@ def test_roundtrip(s: str) -> None:
 
 
 def test_raw_form_cannot_be_forged() -> None:
-    from rag_authz.model import doc
+    from tuplegate.model import doc
 
     with pytest.raises(ValueError, match="raw digest"):
         ids.encode(ids.RAW_PREFIX + "not-a-digest")

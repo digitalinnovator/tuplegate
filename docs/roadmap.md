@@ -20,7 +20,7 @@ The v0.1 scope comes from the project brief. Anything outside it waits under "La
 | Sync engine (per-object diff, tuples before chunks, reconcile plus guarded sweep, expiry sweep, lag samples) | Done |
 | Incremental sync per source (ADR-0005) | Done: GitHub webhooks, Drive Changes API (items and drive membership), Confluence CQL. Gaps documented |
 | Audit record per decision, with the calling application | Done |
-| FastAPI sidecar (`POST /v1/retrieve`, caller tokens, OpenTelemetry spans) | Done. `rag-authz serve` |
+| FastAPI sidecar (`POST /v1/retrieve`, caller tokens, OpenTelemetry spans) | Done. `tuplegate serve` |
 | LangChain and LlamaIndex retrievers | Done |
 | CI: lint, types, unit tests; integration against the full Compose stack | Workflow written; it has not run on GitHub yet because the repo has no remote |
 | Engine-backed benchmark (Q1–Q5 in docs/benchmark/plan.md) and ADR-0004 on the default strategy | Done: [results.md](benchmark/results.md) and [ADR-0004](adr/0004-default-strategy.md). Deviations (fewer seeds, no 100k-doc runs, no principal-pushdown arm) are listed in plan.md |
@@ -62,4 +62,4 @@ Still open:
 - Canary-probe leak tests for live deployments (plant canary docs with known ACLs, probe from outside users) as a GitHub Action.
 - Postgres sync state for multiple sync workers.
 - OpenFGA's AuthZEN endpoints as an alternative interface.
-- Naming: "rag-authz" is a working name. Check registry and trademark availability before launch.
+- Naming: chosen 2026-10-29 (was the working name "rag-authz"). `tuplegate` was free on PyPI and had no same-named GitHub repository that day. A trademark search is still to do before a public launch.

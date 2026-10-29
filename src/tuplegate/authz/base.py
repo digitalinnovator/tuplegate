@@ -1,6 +1,6 @@
 """The one interface OpenFGA, SpiceDB and the in-memory oracle sit behind.
 
-Doc identifiers on this interface are *ACL ids*: the encoded form from ``rag_authz.ids``. The
+Doc identifiers on this interface are *ACL ids*: the encoded form from ``tuplegate.ids``. The
 vector index stores the same ACL id next to each chunk, so neither filter path decodes
 anything on the hot path. User ids are canonical and encoded inside each backend.
 """
@@ -12,8 +12,8 @@ from dataclasses import dataclass, replace
 from enum import StrEnum
 from typing import Protocol
 
-from rag_authz import ids
-from rag_authz.model import UNMAPPED_PREFIX, WILDCARD, ObjectRef, Relation, SubjectRef, Tuple
+from tuplegate import ids
+from tuplegate.model import UNMAPPED_PREFIX, WILDCARD, ObjectRef, Relation, SubjectRef, Tuple
 
 
 class AuthzError(RuntimeError):

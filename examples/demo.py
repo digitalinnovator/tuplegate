@@ -20,11 +20,11 @@ import time
 import uuid
 from datetime import UTC, datetime
 
-from rag_authz.authz.base import AuthzBackend
-from rag_authz.authz.memory import MemoryBackend
-from rag_authz.index.base import VectorIndex
-from rag_authz.index.memory import MemoryIndex
-from rag_authz.model import (
+from tuplegate.authz.base import AuthzBackend
+from tuplegate.authz.memory import MemoryBackend
+from tuplegate.index.base import VectorIndex
+from tuplegate.index.memory import MemoryIndex
+from tuplegate.model import (
     DocumentContent,
     GroupMembers,
     NodeAcl,
@@ -37,9 +37,9 @@ from rag_authz.model import (
     members,
     user,
 )
-from rag_authz.retrieval import AuthorizedRetriever, RetrievalConfig, Strategy
-from rag_authz.sync import SyncEngine
-from rag_authz.testing import HashingEmbedder
+from tuplegate.retrieval import AuthorizedRetriever, RetrievalConfig, Strategy
+from tuplegate.sync import SyncEngine
+from tuplegate.testing import HashingEmbedder
 
 QUESTION = "what happened with the leaked deploy key?"
 ALICE, BOB = "alice@acme.test", "bob@acme.test"
@@ -86,34 +86,34 @@ def build(args: argparse.Namespace) -> tuple[AuthzBackend, VectorIndex, list[obj
     if args.memory:
         return MemoryBackend(), MemoryIndex(), cleanup
     if args.engine == "openfga":
-        from rag_authz.authz.openfga import OpenFGABackend
+        from tuplegate.authz.openfga import OpenFGABackend
 
         b: AuthzBackend = OpenFGABackend(
-            os.environ.get("RAG_AUTHZ_OPENFGA_URL", "http://127.0.0.1:58080"),
+            os.environ.get("TUPLEGATE_OPENFGA_URL", "http://127.0.0.1:58080"),
             store_name=f"demo-{uuid.uuid4().hex[:8]}",
         )
     else:
-        from rag_authz.authz.spicedb import SpiceDBBackend
+        from tuplegate.authz.spicedb import SpiceDBBackend
 
         b = SpiceDBBackend(
-            os.environ.get("RAG_AUTHZ_SPICEDB_ENDPOINT", "127.0.0.1:55051"),
-            os.environ.get("RAG_AUTHZ_SPICEDB_TOKEN", "rag-dev-only"),
+            os.environ.get("TUPLEGATE_SPICEDB_ENDPOINT", "127.0.0.1:55051"),
+            os.environ.get("TUPLEGATE_SPICEDB_TOKEN", "rag-dev-only"),
             insecure=True,
         )
     b.ensure_schema()
     if args.index == "pgvector":
-        from rag_authz.index.pgvector import PgVectorIndex
+        from tuplegate.index.pgvector import PgVectorIndex
 
         ix: VectorIndex = PgVectorIndex(
-            os.environ.get("RAG_AUTHZ_PG_DSN", "postgresql://rag:rag-dev-only@127.0.0.1:55432/rag"),
+            os.environ.get("TUPLEGATE_PG_DSN", "postgresql://rag:rag-dev-only@127.0.0.1:55432/rag"),
             EMB.dim,
             table=f"demo_{uuid.uuid4().hex[:8]}",
         )
     else:
-        from rag_authz.index.qdrant import QdrantIndex
+        from tuplegate.index.qdrant import QdrantIndex
 
         ix = QdrantIndex(
-            os.environ.get("RAG_AUTHZ_QDRANT_URL", "http://127.0.0.1:56333"),
+            os.environ.get("TUPLEGATE_QDRANT_URL", "http://127.0.0.1:56333"),
             EMB.dim,
             collection=f"demo_{uuid.uuid4().hex[:8]}",
         )

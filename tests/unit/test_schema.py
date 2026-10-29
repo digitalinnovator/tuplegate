@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from rag_authz import schema
-from rag_authz.cli import SCHEMA_FILES, SchemaFormat, render_schema
+from tuplegate import schema
+from tuplegate.cli import SCHEMA_FILES, SchemaFormat, render_schema
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[2]
 @pytest.mark.parametrize("fmt", list(SchemaFormat))
 def test_committed_schema_files_match_the_definition(fmt: SchemaFormat) -> None:
     committed = (ROOT / "schema" / SCHEMA_FILES[fmt]).read_text()
-    assert committed == render_schema(fmt), "run: uv run rag-authz schema --write-dir schema"
+    assert committed == render_schema(fmt), "run: uv run tuplegate schema --write-dir schema"
 
 
 def _refs(e: schema.Expr) -> set[str]:

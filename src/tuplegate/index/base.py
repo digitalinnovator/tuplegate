@@ -1,7 +1,7 @@
 """The vector-index interface the retrieval strategies push filters into.
 
 Every chunk carries two ids: ``doc_id`` (canonical, human-readable) and ``acl_id`` (its
-encoded form, see ``rag_authz.ids``). Filters and authorization checks use ``acl_id`` so the
+encoded form, see ``tuplegate.ids``). Filters and authorization checks use ``acl_id`` so the
 hot path never decodes. Adapters compute ``acl_id`` themselves at upsert time and never trust a
 caller-supplied one.
 """

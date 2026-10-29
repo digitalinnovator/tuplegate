@@ -33,11 +33,11 @@ from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
-from rag_authz import ids
-from rag_authz.authz.base import AuthzBackend, Consistency
-from rag_authz.index.base import ChunkRecord
-from rag_authz.index.pgvector import PgVectorIndex
-from rag_authz.model import (
+from tuplegate import ids
+from tuplegate.authz.base import AuthzBackend, Consistency
+from tuplegate.index.base import ChunkRecord
+from tuplegate.index.pgvector import PgVectorIndex
+from tuplegate.model import (
     GroupMembers,
     NodeAcl,
     Relation,
@@ -49,8 +49,8 @@ from rag_authz.model import (
     members,
     user,
 )
-from rag_authz.retrieval import AuthorizedRetriever, RetrievalConfig, Strategy
-from rag_authz.sync import SyncEngine
+from tuplegate.retrieval import AuthorizedRetriever, RetrievalConfig, Strategy
+from tuplegate.sync import SyncEngine
 
 ROOT = Path(__file__).resolve().parents[1]
 U, OTHER = "revoked@bench.test", "stays@bench.test"
@@ -61,18 +61,18 @@ TARGET = doc("bench/folder/target")
 
 def make_engine(name: str) -> AuthzBackend:
     if name == "openfga":
-        from rag_authz.authz.openfga import OpenFGABackend
+        from tuplegate.authz.openfga import OpenFGABackend
 
         b: AuthzBackend = OpenFGABackend(
-            os.environ.get("RAG_AUTHZ_OPENFGA_URL", "http://127.0.0.1:58080"),
+            os.environ.get("TUPLEGATE_OPENFGA_URL", "http://127.0.0.1:58080"),
             store_name=f"lag-{time.time_ns()}",
         )
     else:
-        from rag_authz.authz.spicedb import SpiceDBBackend
+        from tuplegate.authz.spicedb import SpiceDBBackend
 
         sp = SpiceDBBackend(
-            os.environ.get("RAG_AUTHZ_SPICEDB_ENDPOINT", "127.0.0.1:55051"),
-            os.environ.get("RAG_AUTHZ_SPICEDB_TOKEN", "rag-dev-only"),
+            os.environ.get("TUPLEGATE_SPICEDB_ENDPOINT", "127.0.0.1:55051"),
+            os.environ.get("TUPLEGATE_SPICEDB_TOKEN", "rag-dev-only"),
             insecure=True,
         )
         sp.ensure_schema()
@@ -170,7 +170,7 @@ def lag_trials(
 
 def part_a(args: argparse.Namespace) -> list[dict[str, Any]]:
     out = []
-    dsn = os.environ.get("RAG_AUTHZ_PG_DSN", "postgresql://rag:rag-dev-only@127.0.0.1:55432/rag")
+    dsn = os.environ.get("TUPLEGATE_PG_DSN", "postgresql://rag:rag-dev-only@127.0.0.1:55432/rag")
     for name in args.engines:
         engine = make_engine(name)
         index = PgVectorIndex(dsn, 8, table=f"lag_{time.time_ns() % 10**12}")
@@ -305,7 +305,7 @@ def main(argv: list[str] | None = None) -> int:
     out = {
         "benchmark": "revocation_lag",
         "created_at": datetime.now(UTC).isoformat(timespec="seconds"),
-        "package_version": version("rag-authz"),
+        "package_version": version("tuplegate"),
         "python": sys.version.split()[0],
         "platform": platform.platform(),
         "cpu_count": os.cpu_count(),

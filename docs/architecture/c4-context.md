@@ -10,7 +10,7 @@ C4Context
     Person(sec, "Platform / security engineer", "Configures sources, reads audit, runs leak tests in CI")
 
     System(app, "RAG application", "LangChain, LlamaIndex or custom; owns chunking, embedding and generation")
-    System(sidecar, "rag-authz sidecar", "Syncs source ACLs into ReBAC tuples; enforces them inside vector search; audits every decision")
+    System(sidecar, "tuplegate sidecar", "Syncs source ACLs into ReBAC tuples; enforces them inside vector search; audits every decision")
 
     System_Ext(gdrive, "Google Drive + Admin SDK", "Files, permissions, groups")
     System_Ext(github, "GitHub", "Orgs, teams, repos, files")

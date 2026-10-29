@@ -26,9 +26,9 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 
-from rag_authz.authz.base import AuthzBackend, normalise
-from rag_authz.index.base import ChunkRecord, VectorIndex
-from rag_authz.model import (
+from tuplegate.authz.base import AuthzBackend, normalise
+from tuplegate.index.base import ChunkRecord, VectorIndex
+from tuplegate.model import (
     DeleteGroup,
     DeleteNode,
     DocumentContent,

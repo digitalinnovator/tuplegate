@@ -5,9 +5,9 @@ import json
 import httpx
 import pytest
 
-from rag_authz.authz.base import AuthzError, Consistency
-from rag_authz.authz.openfga import OpenFGABackend, from_key, to_key
-from rag_authz.model import NodeAcl, container, doc, members, public, user
+from tuplegate.authz.base import AuthzError, Consistency
+from tuplegate.authz.openfga import OpenFGABackend, from_key, to_key
+from tuplegate.model import NodeAcl, container, doc, members, public, user
 
 
 def test_tuple_keys_roundtrip() -> None:
@@ -88,8 +88,8 @@ def test_http_errors_raise_authz_error() -> None:
 
 
 def test_same_model_ignores_server_defaults() -> None:
-    from rag_authz.authz.openfga import _same_model
-    from rag_authz.schema import openfga_model
+    from tuplegate.authz.openfga import _same_model
+    from tuplegate.schema import openfga_model
 
     wanted = openfga_model()
 

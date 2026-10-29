@@ -26,7 +26,7 @@ from collections import defaultdict
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
 
-from rag_authz.model import (
+from tuplegate.model import (
     UNMAPPED_PREFIX,
     ObjectRef,
     ObjectType,

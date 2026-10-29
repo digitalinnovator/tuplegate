@@ -5,8 +5,8 @@ from __future__ import annotations
 import math
 from collections.abc import Collection, Sequence
 
-from rag_authz import ids
-from rag_authz.index.base import ChunkRecord, Hit
+from tuplegate import ids
+from tuplegate.index.base import ChunkRecord, Hit
 
 
 def _cosine(a: Sequence[float], b: Sequence[float]) -> float:

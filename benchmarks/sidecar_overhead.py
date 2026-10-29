@@ -26,9 +26,9 @@ import httpx
 import uvicorn
 
 from benchmarks.filter_strategies import PRESETS, build_backend, build_index, teardown
-from rag_authz.retrieval import AuthorizedRetriever, RetrievalConfig, Strategy
-from rag_authz.server import Callers, create_app, hash_token
-from rag_authz.synth import SyntheticTruth, generate
+from tuplegate.retrieval import AuthorizedRetriever, RetrievalConfig, Strategy
+from tuplegate.server import Callers, create_app, hash_token
+from tuplegate.synth import SyntheticTruth, generate
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -108,7 +108,7 @@ def main(argv: list[str] | None = None) -> int:
     result = {
         "benchmark": "sidecar_overhead",
         "created_at": datetime.now(UTC).isoformat(timespec="seconds"),
-        "package_version": version("rag-authz"),
+        "package_version": version("tuplegate"),
         "python": sys.version.split()[0],
         "platform": platform.platform(),
         "cpu_count": os.cpu_count(),

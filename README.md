@@ -1,4 +1,4 @@
-# rag-authz (working name)
+# tuplegate
 
 Sync Google Drive, GitHub and Confluence permissions into OpenFGA or SpiceDB, and enforce them inside pgvector or Qdrant search, so a RAG app only retrieves what each user may read, and a revoke takes effect on the next query.
 
@@ -53,39 +53,39 @@ make demo      # the GIF above, against the live stack
 ### As a library
 
 ```python
-from rag_authz.authz.openfga import OpenFGABackend
-from rag_authz.index.pgvector import PgVectorIndex
-from rag_authz.integrations.langchain import AuthzRetriever
-from rag_authz.retrieval import AuthorizedRetriever
+from tuplegate.authz.openfga import OpenFGABackend
+from tuplegate.index.pgvector import PgVectorIndex
+from tuplegate.integrations.langchain import AuthzRetriever
+from tuplegate.retrieval import AuthorizedRetriever
 
 engine = AuthorizedRetriever(OpenFGABackend("http://127.0.0.1:58080"), PgVectorIndex(dsn, dim=768))
 retriever = AuthzRetriever(engine=engine, embeddings=my_embeddings).for_subject("alice@example.com")
 docs = retriever.invoke("how do we rotate deploy keys?")
 ```
 
-LlamaIndex: `rag_authz.integrations.llamaindex.AuthzLlamaRetriever(engine, embed_model, subject=...)`.
+LlamaIndex: `tuplegate.integrations.llamaindex.AuthzLlamaRetriever(engine, embed_model, subject=...)`.
 
 ### As a sidecar (the enforcement boundary)
 
 The sidecar holds the engine and vector-store credentials, so applications cannot query the index unfiltered:
 
 ```sh
-uv run rag-authz hash-token chat-app        # prints a token for the app and its RAG_AUTHZ_CALLERS entry
-export RAG_AUTHZ_CALLERS=chat-app:<sha256> RAG_AUTHZ_DIM=768
-uv run rag-authz serve                      # POST /v1/retrieve {"subject", "vector", "k"}
+uv run tuplegate hash-token chat-app        # prints a token for the app and its TUPLEGATE_CALLERS entry
+export TUPLEGATE_CALLERS=chat-app:<sha256> TUPLEGATE_DIM=768
+uv run tuplegate serve                      # POST /v1/retrieve {"subject", "vector", "k"}
 ```
 
-Or as a container on the dev stack: `RAG_AUTHZ_CALLERS=chat-app:<sha256> make sidecar` (image: `deploy/Dockerfile`, built from `uv.lock`, non-root, base images pinned by digest).
+Or as a container on the dev stack: `TUPLEGATE_CALLERS=chat-app:<sha256> make sidecar` (image: `deploy/Dockerfile`, built from `uv.lock`, non-root, base images pinned by digest).
 
 ### Syncing a source
 
 ```sh
-export RAG_AUTHZ_GITHUB_ORG=acme RAG_AUTHZ_GITHUB_TOKEN=... RAG_AUTHZ_IDENTITY_MAP=identities.json
-uv run rag-authz sync github                         # ACL-only: your app keeps ingesting content
-uv run rag-authz sync github --embedder my.module:embed   # or let the sync engine embed it
+export TUPLEGATE_GITHUB_ORG=acme TUPLEGATE_GITHUB_TOKEN=... TUPLEGATE_IDENTITY_MAP=identities.json
+uv run tuplegate sync github                         # ACL-only: your app keeps ingesting content
+uv run tuplegate sync github --embedder my.module:embed   # or let the sync engine embed it
 ```
 
-`gdrive` and `confluence` work the same way (variables in `src/rag_authz/config.py`). Incremental feeds:
+`gdrive` and `confluence` work the same way (variables in `src/tuplegate/config.py`). Incremental feeds:
 - `GitHubConnector.webhook_events`, with `verify_signature`;
 - `GoogleDriveConnector.changes`;
 - `ConfluenceConnector.changes`.
@@ -101,7 +101,7 @@ flowchart LR
         GH[GitHub]
         CF[Confluence]
     end
-    subgraph rag-authz
+    subgraph tuplegate
         C[Connectors] --> S[Sync engine]
         R[Retriever: pre / post / iterative / cached pre-filter]
     end
@@ -148,7 +148,7 @@ Sources and caveats: [docs/research](docs/research/).
 
 - **Drive and Confluence are untested against real tenants.** They are built from Google's and Atlassian's documented response shapes and tested against fakes of those shapes.
 - **GitHub has been validated on a real organisation:** all 224 person × repository pairs matched GitHub's own permission endpoint ([note](docs/research/2026-10-29-github-real-org.md)). Nested teams and webhooks are still tested only against the fake API.
-- **The OpenFGA list deadline setting must match the server.** OpenFGA ends a list at its deadline silently, so set `RAG_AUTHZ_OPENFGA_LIST_DEADLINE_S` to the server's `OPENFGA_LIST_OBJECTS_DEADLINE`, or truncated lists will be reported as complete. That loses recall, never safety ([note](docs/research/2026-10-29-list-deadlines.md)).
+- **The OpenFGA list deadline setting must match the server.** OpenFGA ends a list at its deadline silently, so set `TUPLEGATE_OPENFGA_LIST_DEADLINE_S` to the server's `OPENFGA_LIST_OBJECTS_DEADLINE`, or truncated lists will be reported as complete. That loses recall, never safety ([note](docs/research/2026-10-29-list-deadlines.md)).
 - **The sidecar trusts its caller to name the end user.** Callers authenticate with tokens, but end-user OIDC verification is on the roadmap.
 - **Some changes only converge on reconcile,** because the sources publish no feed for them:
   - GitHub base-permission changes;

@@ -12,16 +12,16 @@ from collections.abc import Callable, Iterator
 
 import pytest
 
-from rag_authz.authz.openfga import OpenFGABackend
-from rag_authz.authz.spicedb import SpiceDBBackend
-from rag_authz.index.pgvector import PgVectorIndex
-from rag_authz.index.qdrant import QdrantIndex
+from tuplegate.authz.openfga import OpenFGABackend
+from tuplegate.authz.spicedb import SpiceDBBackend
+from tuplegate.index.pgvector import PgVectorIndex
+from tuplegate.index.qdrant import QdrantIndex
 
-OPENFGA_URL = os.environ.get("RAG_AUTHZ_OPENFGA_URL", "http://127.0.0.1:58080")
-SPICEDB_ENDPOINT = os.environ.get("RAG_AUTHZ_SPICEDB_ENDPOINT", "127.0.0.1:55051")
-SPICEDB_TOKEN = os.environ.get("RAG_AUTHZ_SPICEDB_TOKEN", "rag-dev-only")
-QDRANT_URL = os.environ.get("RAG_AUTHZ_QDRANT_URL", "http://127.0.0.1:56333")
-PG_DSN = os.environ.get("RAG_AUTHZ_PG_DSN", "postgresql://rag:rag-dev-only@127.0.0.1:55432/rag")
+OPENFGA_URL = os.environ.get("TUPLEGATE_OPENFGA_URL", "http://127.0.0.1:58080")
+SPICEDB_ENDPOINT = os.environ.get("TUPLEGATE_SPICEDB_ENDPOINT", "127.0.0.1:55051")
+SPICEDB_TOKEN = os.environ.get("TUPLEGATE_SPICEDB_TOKEN", "rag-dev-only")
+QDRANT_URL = os.environ.get("TUPLEGATE_QDRANT_URL", "http://127.0.0.1:56333")
+PG_DSN = os.environ.get("TUPLEGATE_PG_DSN", "postgresql://rag:rag-dev-only@127.0.0.1:55432/rag")
 
 
 @pytest.fixture

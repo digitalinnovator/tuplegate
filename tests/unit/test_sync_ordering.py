@@ -9,12 +9,12 @@ from collections.abc import Sequence
 
 import pytest
 
-from rag_authz.authz.memory import MemoryBackend
-from rag_authz.index.memory import MemoryIndex
-from rag_authz.model import DocumentContent, NodeAcl, UpsertNode, doc, public, user
-from rag_authz.retrieval import AuthorizedRetriever, Strategy
-from rag_authz.sync import SyncEngine, SyncState
-from rag_authz.testing import HashingEmbedder
+from tuplegate.authz.memory import MemoryBackend
+from tuplegate.index.memory import MemoryIndex
+from tuplegate.model import DocumentContent, NodeAcl, UpsertNode, doc, public, user
+from tuplegate.retrieval import AuthorizedRetriever, Strategy
+from tuplegate.sync import SyncEngine, SyncState
+from tuplegate.testing import HashingEmbedder
 
 EMB = HashingEmbedder(32)
 D = doc("drive/salaries")
@@ -174,7 +174,7 @@ def test_expiring_grants_are_recorded_before_they_are_written() -> None:
 
 
 def sync_report() -> object:
-    from rag_authz.sync import SyncReport
+    from tuplegate.sync import SyncReport
 
     return SyncReport("drive")
 

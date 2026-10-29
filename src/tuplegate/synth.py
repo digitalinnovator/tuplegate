@@ -33,8 +33,8 @@ from typing import Literal
 import numpy as np
 import numpy.typing as npt
 
-from rag_authz.leakcheck import Probe
-from rag_authz.model import (
+from tuplegate.leakcheck import Probe
+from tuplegate.model import (
     GroupMembers,
     NodeAcl,
     ObjectRef,
@@ -47,7 +47,7 @@ from rag_authz.model import (
     public,
     user,
 )
-from rag_authz.oracle import Oracle
+from tuplegate.oracle import Oracle
 
 FloatArray = npt.NDArray[np.float32]
 

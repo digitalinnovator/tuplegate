@@ -1,4 +1,4 @@
-"""Command-line entry point: ``rag-authz``."""
+"""Command-line entry point: ``tuplegate``."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from typing import Annotated, Any
 
 import typer
 
-from rag_authz import schema
+from tuplegate import schema
 
 app = typer.Typer(no_args_is_help=True, add_completion=False)
 
@@ -59,20 +59,20 @@ def version_cmd() -> None:
     """Print the package version."""
     from importlib.metadata import version
 
-    typer.echo(version("rag-authz"))
+    typer.echo(version("tuplegate"))
 
 
 @app.command("hash-token")
 def hash_token_cmd(
     name: Annotated[str, typer.Argument(help="Caller name for the audit log.")],
 ) -> None:
-    """Generate a caller token. Prints the token once, and the RAG_AUTHZ_CALLERS entry."""
+    """Generate a caller token. Prints the token once, and the TUPLEGATE_CALLERS entry."""
     import hashlib
     import secrets
 
     token = secrets.token_urlsafe(32)
     typer.echo(f"token (give to the caller, shown once): {token}")
-    typer.echo(f"RAG_AUTHZ_CALLERS entry: {name}:{hashlib.sha256(token.encode()).hexdigest()}")
+    typer.echo(f"TUPLEGATE_CALLERS entry: {name}:{hashlib.sha256(token.encode()).hexdigest()}")
 
 
 @app.command("serve")
@@ -80,10 +80,10 @@ def serve_cmd(
     host: Annotated[str, typer.Option()] = "127.0.0.1",
     port: Annotated[int, typer.Option()] = 8089,
 ) -> None:
-    """Run the sidecar (needs the `server` extra). Settings come from RAG_AUTHZ_* variables."""
+    """Run the sidecar (needs the `server` extra). Settings come from TUPLEGATE_* variables."""
     import uvicorn
 
-    uvicorn.run("rag_authz.server:app_from_env", factory=True, host=host, port=port)
+    uvicorn.run("tuplegate.server:app_from_env", factory=True, host=host, port=port)
 
 
 class Source(StrEnum):
@@ -104,12 +104,12 @@ def sync_cmd(
     ] = None,
     sweep_expired: Annotated[bool, typer.Option(help="Also run the expiry sweep.")] = True,
 ) -> None:
-    """Reconcile one source into the engine (and the index). Settings: RAG_AUTHZ_* variables."""
+    """Reconcile one source into the engine (and the index). Settings: TUPLEGATE_* variables."""
     import importlib
 
-    from rag_authz.config import Settings, build_engine, build_index
-    from rag_authz.identity import IdentityPassthrough, IdentityResolver, MappingResolver
-    from rag_authz.sync import SyncEngine, SyncState
+    from tuplegate.config import Settings, build_engine, build_index
+    from tuplegate.identity import IdentityPassthrough, IdentityResolver, MappingResolver
+    from tuplegate.sync import SyncEngine, SyncState
 
     s = Settings.from_env()
     identity: IdentityResolver | None = (
@@ -122,10 +122,10 @@ def sync_cmd(
     conn: Any
     match source:
         case Source.GITHUB:
-            from rag_authz.connectors.github import GitHubConnector
+            from tuplegate.connectors.github import GitHubConnector
 
             if not s.github_org:
-                raise typer.BadParameter("set RAG_AUTHZ_GITHUB_ORG")
+                raise typer.BadParameter("set TUPLEGATE_GITHUB_ORG")
             conn = GitHubConnector(
                 s.github_org,
                 identity or MappingResolver({}),
@@ -133,7 +133,7 @@ def sync_cmd(
                 include_content=embed is not None,
             )
         case Source.GDRIVE:
-            from rag_authz.connectors.gdrive import GoogleDriveConnector
+            from tuplegate.connectors.gdrive import GoogleDriveConnector
 
             token = s.gdrive_token
             conn = GoogleDriveConnector(
@@ -143,10 +143,10 @@ def sync_cmd(
                 include_content=embed is not None,
             )
         case Source.CONFLUENCE:
-            from rag_authz.connectors.confluence import ConfluenceConnector
+            from tuplegate.connectors.confluence import ConfluenceConnector
 
             if not s.confluence_url:
-                raise typer.BadParameter("set RAG_AUTHZ_CONFLUENCE_URL")
+                raise typer.BadParameter("set TUPLEGATE_CONFLUENCE_URL")
             classes = dict(
                 p.split(":", 1) for p in s.confluence_access_class_groups.split(",") if ":" in p
             )

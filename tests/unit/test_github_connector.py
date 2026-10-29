@@ -1,10 +1,10 @@
 import pytest
 
-from rag_authz.connectors.github import ConnectorError, GitHubConnector
-from rag_authz.identity import MappingResolver
-from rag_authz.model import Tuple, UpsertGroup, UpsertNode, doc
-from rag_authz.oracle import Oracle
 from tests.fakes import IDENTITIES, FakeGitHub
+from tuplegate.connectors.github import ConnectorError, GitHubConnector
+from tuplegate.identity import MappingResolver
+from tuplegate.model import Tuple, UpsertGroup, UpsertNode, doc
+from tuplegate.oracle import Oracle
 
 EXPECTED = {
     "olga@acme.test": {"api", "handbook", "website", "payroll"},

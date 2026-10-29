@@ -16,14 +16,14 @@ from datetime import UTC, datetime
 from typing import IO, TYPE_CHECKING, Protocol
 
 if TYPE_CHECKING:
-    from rag_authz.authz.base import Consistency
-    from rag_authz.index.base import Hit
-    from rag_authz.retrieval import RetrievalStats
+    from tuplegate.authz.base import Consistency
+    from tuplegate.index.base import Hit
+    from tuplegate.retrieval import RetrievalStats
 
 
 # The authenticated application behind the current request (the sidecar sets it per request;
 # library callers may set it too). Context variables follow requests into worker threads.
-caller: ContextVar[str | None] = ContextVar("rag_authz_caller", default=None)
+caller: ContextVar[str | None] = ContextVar("tuplegate_caller", default=None)
 
 
 @dataclass(frozen=True)

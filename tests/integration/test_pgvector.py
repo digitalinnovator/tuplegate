@@ -5,9 +5,9 @@ from collections.abc import Callable
 
 import pytest
 
-from rag_authz import ids
-from rag_authz.index.base import ChunkRecord
-from rag_authz.index.pgvector import PgVectorIndex
+from tuplegate import ids
+from tuplegate.index.base import ChunkRecord
+from tuplegate.index.pgvector import PgVectorIndex
 
 pytestmark = pytest.mark.integration
 

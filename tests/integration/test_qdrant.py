@@ -7,9 +7,9 @@ from collections.abc import Callable
 
 import pytest
 
-from rag_authz import ids
-from rag_authz.index.base import ChunkRecord
-from rag_authz.index.qdrant import QdrantIndex
+from tuplegate import ids
+from tuplegate.index.base import ChunkRecord
+from tuplegate.index.qdrant import QdrantIndex
 
 pytestmark = pytest.mark.integration
 

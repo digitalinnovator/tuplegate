@@ -3,8 +3,8 @@
 Status (2026-10-28):
 
 - **Built:**
-  - the harness (`src/rag_authz/leakcheck.py`);
-  - the generator (`src/rag_authz/synth.py`, now with stratified probe sampling);
+  - the harness (`src/tuplegate/leakcheck.py`);
+  - the generator (`src/tuplegate/synth.py`, now with stratified probe sampling);
   - the strategy runner (`benchmarks/filter_strategies.py`);
   - the revocation-lag and revoke-cost runner (`benchmarks/revocation_lag.py`);
   - the sidecar-overhead runner (`benchmarks/sidecar_overhead.py`);

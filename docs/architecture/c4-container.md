@@ -1,10 +1,10 @@
 # C4 level 2: containers
 
-v0.1 is one Python package (`rag_authz`) that runs in two shapes: imported into an application (library mode) or behind a FastAPI process (sidecar mode, `rag-authz serve`). The boxes inside the boundary are modules, not services. Each is drawn separately because it has its own contract and ADR.
+v0.1 is one Python package (`tuplegate`) that runs in two shapes: imported into an application (library mode) or behind a FastAPI process (sidecar mode, `tuplegate serve`). The boxes inside the boundary are modules, not services. Each is drawn separately because it has its own contract and ADR.
 
 ```mermaid
 C4Container
-    title Containers: rag-authz (v0.1)
+    title Containers: tuplegate (v0.1)
 
     System_Ext(app, "RAG application", "LangChain / LlamaIndex / custom")
     System_Ext(sources, "Sources", "Google Drive, GitHub, Confluence")
@@ -12,7 +12,7 @@ C4Container
     System_Ext(vdb, "pgvector / Qdrant", "Chunks with doc_id + acl_id")
     System_Ext(siem, "Audit sink", "JSON lines / SIEM")
 
-    System_Boundary(s, "rag-authz") {
+    System_Boundary(s, "tuplegate") {
         Container(api, "Retrieval API", "FastAPI", "POST /v1/retrieve; caller tokens; the enforcement boundary in sidecar mode")
         Container(sdk, "Retrievers", "langchain-core; llama-index-core", "Retriever bound to one subject")
         Container(retr, "Retrieval engine", "Python", "pre_filter / post_filter / iterative / cached_pre_filter; safety invariant; audit (ADR-0003)")

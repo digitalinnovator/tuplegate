@@ -12,16 +12,16 @@ from datetime import UTC, datetime
 import pytest
 from langchain_core.embeddings import Embeddings
 
-from rag_authz.authz.openfga import OpenFGABackend
-from rag_authz.connectors.github import GitHubConnector
-from rag_authz.identity import MappingResolver
-from rag_authz.index.pgvector import PgVectorIndex
-from rag_authz.integrations.langchain import AuthzRetriever
-from rag_authz.model import DeleteNode, doc
-from rag_authz.retrieval import AuthorizedRetriever
-from rag_authz.sync import SyncEngine
-from rag_authz.testing import HashingEmbedder
 from tests.fakes import IDENTITIES, FakeGitHub
+from tuplegate.authz.openfga import OpenFGABackend
+from tuplegate.connectors.github import GitHubConnector
+from tuplegate.identity import MappingResolver
+from tuplegate.index.pgvector import PgVectorIndex
+from tuplegate.integrations.langchain import AuthzRetriever
+from tuplegate.model import DeleteNode, doc
+from tuplegate.retrieval import AuthorizedRetriever
+from tuplegate.sync import SyncEngine
+from tuplegate.testing import HashingEmbedder
 
 pytestmark = pytest.mark.integration
 EMBED = HashingEmbedder(dim=128)

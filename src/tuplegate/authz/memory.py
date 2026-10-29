@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from collections.abc import Collection, Sequence
 
-from rag_authz import ids
-from rag_authz.authz.base import Consistency, ListResult, validate_subject
-from rag_authz.model import ObjectRef, ObjectType, Tuple, doc
-from rag_authz.oracle import Oracle
+from tuplegate import ids
+from tuplegate.authz.base import Consistency, ListResult, validate_subject
+from tuplegate.model import ObjectRef, ObjectType, Tuple, doc
+from tuplegate.oracle import Oracle
 
 
 class MemoryBackend:

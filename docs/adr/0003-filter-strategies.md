@@ -38,7 +38,7 @@ A second axis is **consistency**:
 - The request fails and the audit record carries the error. Nothing ever falls back to unfiltered results.
 - Strategies may differ in recall, latency and engine load. **They may not differ in what they can leak**, and a unit test runs every strategy through the leak harness.
 
-### 2. The strategies (`rag_authz.retrieval.Strategy`)
+### 2. The strategies (`tuplegate.retrieval.Strategy`)
 
 | Strategy | Mechanism | Knobs |
 |---|---|---|

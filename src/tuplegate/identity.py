@@ -13,7 +13,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Protocol
 
-from rag_authz.model import UNMAPPED_PREFIX, SubjectRef, user
+from tuplegate.model import UNMAPPED_PREFIX, SubjectRef, user
 
 
 class IdentityResolver(Protocol):

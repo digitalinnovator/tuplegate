@@ -21,16 +21,16 @@ from typing import Any
 
 import httpx
 
-from rag_authz import ids
-from rag_authz.authz.base import (
+from tuplegate import ids
+from tuplegate.authz.base import (
     AuthzError,
     Consistency,
     ListResult,
     safe_batches,
     validate_subject,
 )
-from rag_authz.model import CAN_VIEW, ObjectRef, ObjectType, Relation, SubjectRef, Tuple
-from rag_authz.schema import openfga_model
+from tuplegate.model import CAN_VIEW, ObjectRef, ObjectType, Relation, SubjectRef, Tuple
+from tuplegate.schema import openfga_model
 
 log = logging.getLogger(__name__)
 
@@ -83,7 +83,7 @@ class OpenFGABackend:
     def __init__(
         self,
         api_url: str,
-        store_name: str = "rag-authz",
+        store_name: str = "tuplegate",
         *,
         api_token: str | None = None,
         max_tuples_per_write: int = 100,

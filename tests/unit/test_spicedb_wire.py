@@ -18,9 +18,9 @@ from authzed.api.v1.permission_service_pb2 import (
 )
 from google.rpc.status_pb2 import Status
 
-from rag_authz.authz.base import AuthzError, Consistency
-from rag_authz.authz.spicedb import SpiceDBBackend, from_relationship, to_relationship
-from rag_authz.model import NodeAcl, container, doc, members, public, user
+from tuplegate.authz.base import AuthzError, Consistency
+from tuplegate.authz.spicedb import SpiceDBBackend, from_relationship, to_relationship
+from tuplegate.model import NodeAcl, container, doc, members, public, user
 
 HAS = CheckPermissionResponse.PERMISSIONSHIP_HAS_PERMISSION
 NO = CheckPermissionResponse.PERMISSIONSHIP_NO_PERMISSION

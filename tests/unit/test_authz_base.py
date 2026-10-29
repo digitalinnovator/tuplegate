@@ -1,5 +1,5 @@
-from rag_authz.authz.base import safe_batches
-from rag_authz.model import (
+from tuplegate.authz.base import safe_batches
+from tuplegate.model import (
     NodeAcl,
     Relation,
     Tuple,

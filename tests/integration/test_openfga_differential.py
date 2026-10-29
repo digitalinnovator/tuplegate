@@ -10,11 +10,11 @@ import random
 
 import pytest
 
-from rag_authz import ids
-from rag_authz.authz.base import Consistency
-from rag_authz.authz.openfga import OpenFGABackend
-from rag_authz.model import NodeAcl, container, doc, members, user
-from rag_authz.synth import OrgSpec, generate
+from tuplegate import ids
+from tuplegate.authz.base import Consistency
+from tuplegate.authz.openfga import OpenFGABackend
+from tuplegate.model import NodeAcl, container, doc, members, user
+from tuplegate.synth import OrgSpec, generate
 
 pytestmark = pytest.mark.integration
 

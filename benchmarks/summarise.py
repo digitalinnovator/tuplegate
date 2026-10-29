@@ -262,7 +262,7 @@ def main() -> int:
         f"{st['selectivity_p90']:.1%}, max {st['selectivity_max']:.1%}.",
         f"- **Machine:** {main_run['platform']}, {main_run['cpu_count']} CPUs; every service in "
         "Docker on localhost (`deploy/compose.yaml`, images pinned by digest), one run at a time.",
-        f"- **Software:** rag-authz {main_run['package_version']}, Python {main_run['python']}.",
+        f"- **Software:** tuplegate {main_run['package_version']}, Python {main_run['python']}.",
         "- **Consistency:** `full` unless stated: OpenFGA `HIGHER_CONSISTENCY`, SpiceDB "
         "`fully_consistent`.",
         "- **`cached_pre_filter`** is measured with a warm cache (every probe user's list cached, "

@@ -8,11 +8,11 @@ from __future__ import annotations
 
 import pytest
 
-from rag_authz import ids
-from rag_authz.authz.base import AuthzBackend, Consistency
-from rag_authz.index.memory import MemoryIndex
-from rag_authz.model import DeleteNode, NodeAcl, UpsertNode, container, doc, members, user
-from rag_authz.sync import SyncEngine
+from tuplegate import ids
+from tuplegate.authz.base import AuthzBackend, Consistency
+from tuplegate.index.memory import MemoryIndex
+from tuplegate.model import DeleteNode, NodeAcl, UpsertNode, container, doc, members, user
+from tuplegate.sync import SyncEngine
 
 pytestmark = pytest.mark.integration
 

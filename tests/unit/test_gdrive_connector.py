@@ -3,17 +3,17 @@ from __future__ import annotations
 import httpx
 import pytest
 
-from rag_authz import ids
-from rag_authz.authz.base import Consistency
-from rag_authz.authz.memory import MemoryBackend
-from rag_authz.connectors._http import ConnectorError
-from rag_authz.connectors.gdrive import GoogleDriveConnector
-from rag_authz.index.memory import MemoryIndex
-from rag_authz.model import Tuple, UpsertGroup, UpsertNode, user
-from rag_authz.oracle import Oracle
-from rag_authz.sync import SyncEngine
-from rag_authz.testing import HashingEmbedder
 from tests.fakes_gdrive import FakeDrive
+from tuplegate import ids
+from tuplegate.authz.base import Consistency
+from tuplegate.authz.memory import MemoryBackend
+from tuplegate.connectors._http import ConnectorError
+from tuplegate.connectors.gdrive import GoogleDriveConnector
+from tuplegate.index.memory import MemoryIndex
+from tuplegate.model import Tuple, UpsertGroup, UpsertNode, user
+from tuplegate.oracle import Oracle
+from tuplegate.sync import SyncEngine
+from tuplegate.testing import HashingEmbedder
 
 ALL = {"api-design", "secret.txt", "link.txt", "public.md", "domain.md", "guest.md", "all-hands.md"}
 EXPECTED = {
@@ -146,7 +146,7 @@ def test_other_errors_in_the_feed_raise_so_the_token_is_kept() -> None:
 
 
 def test_identity_resolver_maps_and_counts_unmapped() -> None:
-    from rag_authz.identity import MappingResolver
+    from tuplegate.identity import MappingResolver
 
     resolver = MappingResolver({"gdrive": {"bob@acme.test": "bob@corp.test"}})
     conn = _connector(FakeDrive(), identity=resolver)

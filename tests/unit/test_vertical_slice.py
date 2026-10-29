@@ -8,20 +8,20 @@ from collections.abc import Sequence
 import pytest
 from langchain_core.embeddings import Embeddings
 
-from rag_authz import leakcheck
-from rag_authz.authz.memory import MemoryBackend
-from rag_authz.connectors.github import GitHubConnector
-from rag_authz.identity import MappingResolver
-from rag_authz.index.base import Hit
-from rag_authz.index.memory import MemoryIndex
-from rag_authz.integrations.langchain import AuthzRetriever
-from rag_authz.leakcheck import Probe
-from rag_authz.model import doc
-from rag_authz.oracle import Oracle
-from rag_authz.retrieval import AuthorizedRetriever, Strategy
-from rag_authz.sync import SyncEngine
-from rag_authz.testing import HashingEmbedder
 from tests.fakes import IDENTITIES, FakeGitHub
+from tuplegate import leakcheck
+from tuplegate.authz.memory import MemoryBackend
+from tuplegate.connectors.github import GitHubConnector
+from tuplegate.identity import MappingResolver
+from tuplegate.index.base import Hit
+from tuplegate.index.memory import MemoryIndex
+from tuplegate.integrations.langchain import AuthzRetriever
+from tuplegate.leakcheck import Probe
+from tuplegate.model import doc
+from tuplegate.oracle import Oracle
+from tuplegate.retrieval import AuthorizedRetriever, Strategy
+from tuplegate.sync import SyncEngine
+from tuplegate.testing import HashingEmbedder
 
 EMBED = HashingEmbedder(dim=128)
 QUESTION = "how do deploy keys rotate?"

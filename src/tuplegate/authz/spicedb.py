@@ -1,4 +1,4 @@
-"""SpiceDB backend over the official gRPC client (``pip install rag-authz[spicedb]``).
+"""SpiceDB backend over the official gRPC client (``pip install tuplegate[spicedb]``).
 
 Verified against SpiceDB v1.56.2 (docs/research/2026-09-27-engines-and-vector-stores.md):
 
@@ -48,16 +48,16 @@ from authzed.api.v1 import (
 from authzed.api.v1.permission_service_pb2 import LOOKUP_PERMISSIONSHIP_HAS_PERMISSION
 from grpcutil import bearer_token_credentials
 
-from rag_authz import ids
-from rag_authz.authz.base import (
+from tuplegate import ids
+from tuplegate.authz.base import (
     AuthzError,
     Consistency,
     ListResult,
     safe_batches,
     validate_subject,
 )
-from rag_authz.model import CAN_VIEW, ObjectRef, ObjectType, Relation, SubjectRef, Tuple
-from rag_authz.schema import spicedb_schema
+from tuplegate.model import CAN_VIEW, ObjectRef, ObjectType, Relation, SubjectRef, Tuple
+from tuplegate.schema import spicedb_schema
 
 log = logging.getLogger(__name__)
 

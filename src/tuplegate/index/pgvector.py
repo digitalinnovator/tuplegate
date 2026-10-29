@@ -18,8 +18,8 @@ from pgvector import Vector
 from pgvector.psycopg import register_vector
 from psycopg import sql
 
-from rag_authz import ids
-from rag_authz.index.base import ChunkRecord, Hit
+from tuplegate import ids
+from tuplegate.index.base import ChunkRecord, Hit
 
 _IDENT = re.compile(r"^[a-z_][a-z0-9_]{0,62}$")
 IterativeScan = Literal["off", "relaxed_order", "strict_order"]

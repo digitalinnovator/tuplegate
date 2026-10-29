@@ -4,7 +4,7 @@ import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 
-from rag_authz.model import (
+from tuplegate.model import (
     GroupMembers,
     NodeAcl,
     Tuple,
@@ -15,7 +15,7 @@ from rag_authz.model import (
     public,
     user,
 )
-from rag_authz.oracle import CycleError, Oracle
+from tuplegate.oracle import CycleError, Oracle
 
 
 def build(*parts: NodeAcl | GroupMembers) -> Oracle:

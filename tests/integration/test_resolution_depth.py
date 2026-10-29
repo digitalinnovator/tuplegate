@@ -17,9 +17,9 @@ from __future__ import annotations
 
 import pytest
 
-from rag_authz import ids
-from rag_authz.authz.base import AuthzBackend, AuthzError, Consistency
-from rag_authz.model import NodeAcl, Tuple, container, doc, user
+from tuplegate import ids
+from tuplegate.authz.base import AuthzBackend, AuthzError, Consistency
+from tuplegate.model import NodeAcl, Tuple, container, doc, user
 
 pytestmark = pytest.mark.integration
 

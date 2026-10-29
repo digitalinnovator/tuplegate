@@ -37,7 +37,7 @@ A flattened model turns every folder-level revoke into a rewrite of every descen
 
 ### 1. One small schema for every source
 
-Four types, five stored relations and one permission. It is defined once in `src/rag_authz/schema.py` and rendered to `schema/openfga.fga`, `schema/openfga.json` and `schema/spicedb.zed`. A golden test keeps the committed files in sync.
+Four types, five stored relations and one permission. It is defined once in `src/tuplegate/schema.py` and rendered to `schema/openfga.fga`, `schema/openfga.json` and `schema/spicedb.zed`. A golden test keeps the committed files in sync.
 
 ```
 type user
@@ -77,7 +77,7 @@ Every vector chunk carries its document's id twice: `doc_id` (canonical, readabl
 
 ### 5. One id codec for both engines
 
-`rag_authz.ids.encode`:
+`tuplegate.ids.encode`:
 
 - keeps SpiceDB-safe characters;
 - writes every other UTF-8 byte as `=XX`;
@@ -133,7 +133,7 @@ The codec is injective, and its output is valid for both engines. Property tests
 
 ### 9. The oracle is the specification
 
-`src/rag_authz/oracle.py` interprets the tuple set independently of any engine. It serves as the unit-test backend, the benchmark's ground truth, and the reference for differential tests: OpenFGA and SpiceDB must agree with it on every (user, doc) pair of a generated organisation.
+`src/tuplegate/oracle.py` interprets the tuple set independently of any engine. It serves as the unit-test backend, the benchmark's ground truth, and the reference for differential tests: OpenFGA and SpiceDB must agree with it on every (user, doc) pair of a generated organisation.
 
 ### Amendments (2026-10-28)
 

@@ -20,10 +20,10 @@ from collections.abc import Sequence
 from dataclasses import dataclass, field
 from enum import StrEnum
 
-from rag_authz import tracing
-from rag_authz.audit import AuditRecord, AuditSink, NullAuditSink, caller
-from rag_authz.authz.base import AuthzBackend, Consistency, ListResult, validate_subject
-from rag_authz.index.base import Hit, VectorIndex
+from tuplegate import tracing
+from tuplegate.audit import AuditRecord, AuditSink, NullAuditSink, caller
+from tuplegate.authz.base import AuthzBackend, Consistency, ListResult, validate_subject
+from tuplegate.index.base import Hit, VectorIndex
 
 
 class Strategy(StrEnum):
@@ -113,13 +113,13 @@ class AuthorizedRetriever:
         if strat is Strategy.UNFILTERED and not self.config.allow_unfiltered:
             raise PermissionError("the unfiltered baseline is disabled")
         rid = request_id or uuid.uuid4().hex
-        with tracing.span("rag_authz.retrieve", strategy=str(strat), k=k, request_id=rid) as sp:
+        with tracing.span("tuplegate.retrieve", strategy=str(strat), k=k, request_id=rid) as sp:
             result = self._retrieve(subject, vector, k, strat, rid)
             st = result.stats
-            sp.set_attribute("rag_authz.hits", len(result.hits))
-            sp.set_attribute("rag_authz.candidates", st.candidates)
-            sp.set_attribute("rag_authz.authz_calls", st.authz_calls)
-            sp.set_attribute("rag_authz.list_complete", st.list_complete)
+            sp.set_attribute("tuplegate.hits", len(result.hits))
+            sp.set_attribute("tuplegate.candidates", st.candidates)
+            sp.set_attribute("tuplegate.authz_calls", st.authz_calls)
+            sp.set_attribute("tuplegate.list_complete", st.list_complete)
             return result
 
     def _retrieve(

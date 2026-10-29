@@ -23,7 +23,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import asdict, dataclass, field
 from typing import Any, Protocol
 
-from rag_authz.index.base import Hit
+from tuplegate.index.base import Hit
 
 SELECTIVITY_BUCKETS: tuple[tuple[str, float, float], ...] = (
     ("<1%", 0.0, 0.01),

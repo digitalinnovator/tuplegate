@@ -1,8 +1,8 @@
-# The rag-authz sidecar: the enforcement boundary (ADR-0001). Built from uv.lock; no dev or
+# The tuplegate sidecar: the enforcement boundary (ADR-0001). Built from uv.lock; no dev or
 # notebook dependencies. Base images are pinned by digest; bump them in a deliberate commit.
 #
-#   docker build -f deploy/Dockerfile -t rag-authz:dev .
-#   docker run --rm -p 8089:8089 --env-file sidecar.env rag-authz:dev
+#   docker build -f deploy/Dockerfile -t tuplegate:dev .
+#   docker run --rm -p 8089:8089 --env-file sidecar.env tuplegate:dev
 
 FROM python:3.12-slim-bookworm@sha256:e697c81897302a4c4333bade000d98038fbb21eb064f8ee1fd42d02ebcd9d337 AS build
 COPY --from=ghcr.io/astral-sh/uv:0.10.11@sha256:3472e43b4e738cf911c99d41bb34331280efad54c73b1def654a6227bb59b2b4 /uv /bin/uv
@@ -25,4 +25,4 @@ USER 10001
 EXPOSE 8089
 HEALTHCHECK --interval=10s --timeout=3s --retries=3 \
   CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8089/healthz', timeout=2)"]
-ENTRYPOINT ["rag-authz", "serve", "--host", "0.0.0.0", "--port", "8089"]
+ENTRYPOINT ["tuplegate", "serve", "--host", "0.0.0.0", "--port", "8089"]

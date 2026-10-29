@@ -28,9 +28,9 @@ up-full:
 down:
 	$(COMPOSE) --profile full down -v
 
-# Re-render schema/ from src/rag_authz/schema.py (a unit test fails if they drift).
+# Re-render schema/ from src/tuplegate/schema.py (a unit test fails if they drift).
 schema:
-	uv run rag-authz schema --write-dir schema
+	uv run tuplegate schema --write-dir schema
 
 # In-memory reference run: correctness and recall only; latencies are not meaningful.
 bench-smoke:
@@ -64,7 +64,7 @@ demo:
 
 # The sidecar image (no push), and the sidecar on the dev stack at 127.0.0.1:58089.
 image:
-	docker build -f deploy/Dockerfile -t rag-authz:dev .
+	docker build -f deploy/Dockerfile -t tuplegate:dev .
 
 sidecar:
 	$(COMPOSE) --profile sidecar up -d --build --wait sidecar

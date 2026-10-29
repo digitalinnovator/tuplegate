@@ -3,7 +3,7 @@ from __future__ import annotations
 import httpx
 import pytest
 
-from rag_authz.connectors._http import SourceHttp
+from tuplegate.connectors._http import SourceHttp
 
 
 @pytest.mark.parametrize("retry_after", ["-5", "nan", "inf", "Wed, 21 Oct 2026 07:28:00 GMT"])

@@ -1,4 +1,4 @@
-"""The sidecar: one authorised retrieve call over HTTP (``pip install rag-authz[server]``).
+"""The sidecar: one authorised retrieve call over HTTP (``pip install tuplegate[server]``).
 
 This process is the enforcement boundary (ADR-0001, sidecar mode): it holds the engine and
 vector-store credentials, and applications hold only a sidecar token. v0.1 trusts an
@@ -15,7 +15,7 @@ Failure modes, all closed:
 - An invalid subject (empty, ``*``, or an unmapped ``~source/...`` principal) returns 400.
 - ``strategy: "unfiltered"`` is refused with 403, whatever the retriever's configuration.
 
-Run it with ``rag-authz serve`` (configuration from environment variables, see ``Settings``).
+Run it with ``tuplegate serve`` (configuration from environment variables, see ``Settings``).
 """
 
 # No ``from __future__ import annotations`` here: FastAPI resolves endpoint annotations at
@@ -32,11 +32,11 @@ from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from rag_authz import audit
-from rag_authz.audit import JsonLinesAuditSink
-from rag_authz.authz.base import AuthzError, Consistency
-from rag_authz.config import Settings, build_engine, build_index
-from rag_authz.retrieval import AuthorizedRetriever, RetrievalConfig, Strategy
+from tuplegate import audit
+from tuplegate.audit import JsonLinesAuditSink
+from tuplegate.authz.base import AuthzError, Consistency
+from tuplegate.config import Settings, build_engine, build_index
+from tuplegate.retrieval import AuthorizedRetriever, RetrievalConfig, Strategy
 
 log = logging.getLogger(__name__)
 
@@ -95,7 +95,7 @@ class Callers:
 
     @classmethod
     def from_spec(cls, spec: str) -> "Callers":
-        """``name:sha256hex,name2:sha256hex`` (generate a hash with ``rag-authz hash-token``)."""
+        """``name:sha256hex,name2:sha256hex`` (generate a hash with ``tuplegate hash-token``)."""
         out: dict[str, str] = {}
         for part in filter(None, (p.strip() for p in spec.split(","))):
             name, _, digest = part.partition(":")
@@ -123,7 +123,7 @@ def create_app(
 ) -> FastAPI:
     if not callers.by_hash:
         raise ValueError("refusing to start without at least one caller token")
-    app = FastAPI(title="rag-authz", version="0.1.0", docs_url=None, redoc_url=None)
+    app = FastAPI(title="tuplegate", version="0.1.0", docs_url=None, redoc_url=None)
 
     def authenticate(request: Request) -> str:
         header = request.headers.get("authorization", "")
@@ -206,10 +206,10 @@ def create_app(
 
 
 def app_from_env() -> FastAPI:
-    """Factory for ``uvicorn --factory rag_authz.server:app_from_env``."""
+    """Factory for ``uvicorn --factory tuplegate.server:app_from_env``."""
     s = Settings.from_env()
     if not s.callers:
-        raise ValueError("RAG_AUTHZ_CALLERS is required (see `rag-authz hash-token`)")
+        raise ValueError("TUPLEGATE_CALLERS is required (see `tuplegate hash-token`)")
     engine, index = build_engine(s), build_index(s)
     stream = sys.stdout if s.audit_log == "-" else open(s.audit_log, "a", encoding="utf-8")  # noqa: SIM115
     retriever = AuthorizedRetriever(

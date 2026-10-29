@@ -25,14 +25,14 @@ from typing import Any
 
 import httpx
 
-from rag_authz import ids
-from rag_authz.authz.base import Consistency
-from rag_authz.authz.openfga import OpenFGABackend
-from rag_authz.connectors.github import GitHubConnector, repo_container
-from rag_authz.identity import IdentityPassthrough
-from rag_authz.model import NodeAcl, Tuple, UpsertGroup, UpsertNode, container, doc
-from rag_authz.oracle import Oracle
-from rag_authz.sync import SyncEngine
+from tuplegate import ids
+from tuplegate.authz.base import Consistency
+from tuplegate.authz.openfga import OpenFGABackend
+from tuplegate.connectors.github import GitHubConnector, repo_container
+from tuplegate.identity import IdentityPassthrough
+from tuplegate.model import NodeAcl, Tuple, UpsertGroup, UpsertNode, container, doc
+from tuplegate.oracle import Oracle
+from tuplegate.sync import SyncEngine
 
 
 class _NoIndex:

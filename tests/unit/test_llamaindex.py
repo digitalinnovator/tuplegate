@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import pytest
 
-from rag_authz.authz.memory import MemoryBackend
-from rag_authz.index.base import ChunkRecord
-from rag_authz.index.memory import MemoryIndex
-from rag_authz.integrations.llamaindex import AuthzLlamaRetriever
-from rag_authz.model import NodeAcl, doc, user
-from rag_authz.retrieval import AuthorizedRetriever, Strategy
-from rag_authz.testing import HashingEmbedder
+from tuplegate.authz.memory import MemoryBackend
+from tuplegate.index.base import ChunkRecord
+from tuplegate.index.memory import MemoryIndex
+from tuplegate.integrations.llamaindex import AuthzLlamaRetriever
+from tuplegate.model import NodeAcl, doc, user
+from tuplegate.retrieval import AuthorizedRetriever, Strategy
+from tuplegate.testing import HashingEmbedder
 
 EMB = HashingEmbedder(32)
 

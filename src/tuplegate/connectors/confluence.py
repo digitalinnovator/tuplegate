@@ -43,10 +43,10 @@ from urllib.parse import urlparse
 
 import httpx
 
-from rag_authz.connectors._http import ConnectorError, SourceHttp
-from rag_authz.connectors._tree import DepthTracker
-from rag_authz.identity import IdentityResolver, PrincipalMapper
-from rag_authz.model import (
+from tuplegate.connectors._http import ConnectorError, SourceHttp
+from tuplegate.connectors._tree import DepthTracker
+from tuplegate.identity import IdentityResolver, PrincipalMapper
+from tuplegate.model import (
     DocumentContent,
     GroupMembers,
     NodeAcl,

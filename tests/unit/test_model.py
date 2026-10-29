@@ -1,6 +1,6 @@
 import pytest
 
-from rag_authz.model import (
+from tuplegate.model import (
     NodeAcl,
     ObjectRef,
     ObjectType,

@@ -14,7 +14,7 @@ from typing import Any
 try:
     from opentelemetry import trace as _trace
 
-    _tracer: Any = _trace.get_tracer("rag_authz")
+    _tracer: Any = _trace.get_tracer("tuplegate")
 except ImportError:  # pragma: no cover - exercised only without the extra
     _tracer = None
 
@@ -35,5 +35,5 @@ def span(name: str, **attributes: Any) -> Iterator[Any]:
     with _tracer.start_as_current_span(name) as s:
         for k, v in attributes.items():
             if v is not None:
-                s.set_attribute(f"rag_authz.{k}", v)
+                s.set_attribute(f"tuplegate.{k}", v)
         yield s

@@ -23,12 +23,12 @@ from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
-from rag_authz import leakcheck
-from rag_authz.authz.base import AuthzBackend, Consistency
-from rag_authz.authz.memory import MemoryBackend
-from rag_authz.index.base import ChunkRecord, VectorIndex
-from rag_authz.retrieval import AuthorizedRetriever, RetrievalConfig, Strategy
-from rag_authz.synth import OrgSpec, SyntheticOrg, SyntheticTruth, generate
+from tuplegate import leakcheck
+from tuplegate.authz.base import AuthzBackend, Consistency
+from tuplegate.authz.memory import MemoryBackend
+from tuplegate.index.base import ChunkRecord, VectorIndex
+from tuplegate.retrieval import AuthorizedRetriever, RetrievalConfig, Strategy
+from tuplegate.synth import OrgSpec, SyntheticOrg, SyntheticTruth, generate
 
 PRESETS: dict[str, OrgSpec] = {
     "smoke": OrgSpec(users=500, groups=60, roots=30, docs=3_000, queries=200),
@@ -81,19 +81,19 @@ def build_backend(name: str, org: SyntheticOrg) -> tuple[AuthzBackend, dict[str,
     if name == "memory":
         b: AuthzBackend = MemoryBackend(org.tuples)
     elif name == "openfga":
-        from rag_authz.authz.openfga import OpenFGABackend
+        from tuplegate.authz.openfga import OpenFGABackend
 
-        url = os.environ.get("RAG_AUTHZ_OPENFGA_URL", "http://127.0.0.1:58080")
+        url = os.environ.get("TUPLEGATE_OPENFGA_URL", "http://127.0.0.1:58080")
         fga = OpenFGABackend(url, store_name=f"bench-{int(time.time())}")
         fga.ensure_schema()
         fga.write(org.tuples, [])
         b = fga
     elif name == "spicedb":
-        from rag_authz.authz.spicedb import SpiceDBBackend
+        from tuplegate.authz.spicedb import SpiceDBBackend
 
         sp = SpiceDBBackend(
-            os.environ.get("RAG_AUTHZ_SPICEDB_ENDPOINT", "127.0.0.1:55051"),
-            os.environ.get("RAG_AUTHZ_SPICEDB_TOKEN", "rag-dev-only"),
+            os.environ.get("TUPLEGATE_SPICEDB_ENDPOINT", "127.0.0.1:55051"),
+            os.environ.get("TUPLEGATE_SPICEDB_TOKEN", "rag-dev-only"),
             insecure=True,
         )
         sp.ensure_schema()
@@ -125,23 +125,23 @@ def build_index(
         )
     ]
     if name == "exact":
-        from rag_authz.index.exact import ExactIndex
+        from tuplegate.index.exact import ExactIndex
 
         ix: VectorIndex = ExactIndex(org.spec.dim)
     elif name == "pgvector":
-        from rag_authz.index.pgvector import PgVectorIndex
+        from tuplegate.index.pgvector import PgVectorIndex
 
         dsn = os.environ.get(
-            "RAG_AUTHZ_PG_DSN", "postgresql://rag:rag-dev-only@127.0.0.1:55432/rag"
+            "TUPLEGATE_PG_DSN", "postgresql://rag:rag-dev-only@127.0.0.1:55432/rag"
         )
         ix = PgVectorIndex(
             dsn, org.spec.dim, table=f"bench_{int(time.time())}", iterative_scan=iterative_scan
         )  # type: ignore[arg-type]
     elif name == "qdrant":
-        from rag_authz.index.qdrant import QdrantIndex
+        from tuplegate.index.qdrant import QdrantIndex
 
         ix = QdrantIndex(
-            os.environ.get("RAG_AUTHZ_QDRANT_URL", "http://127.0.0.1:56333"),
+            os.environ.get("TUPLEGATE_QDRANT_URL", "http://127.0.0.1:56333"),
             org.spec.dim,
             collection=f"bench_{int(time.time())}",
             acorn=acorn,
@@ -271,7 +271,7 @@ def main(argv: list[str] | None = None) -> int:
         "benchmark": "filter_strategies",
         "created_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "git_commit": _git_commit(),
-        "package_version": version("rag-authz"),
+        "package_version": version("tuplegate"),
         "python": sys.version.split()[0],
         "platform": platform.platform(),
         "machine": platform.machine(),

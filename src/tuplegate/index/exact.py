@@ -12,8 +12,8 @@ from collections.abc import Collection, Sequence
 import numpy as np
 import numpy.typing as npt
 
-from rag_authz import ids
-from rag_authz.index.base import ChunkRecord, Hit
+from tuplegate import ids
+from tuplegate.index.base import ChunkRecord, Hit
 
 
 class ExactIndex:

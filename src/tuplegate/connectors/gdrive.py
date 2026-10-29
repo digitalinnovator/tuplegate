@@ -46,10 +46,10 @@ from typing import Any
 
 import httpx
 
-from rag_authz.connectors._http import ConnectorError, SourceHttp
-from rag_authz.connectors._tree import DepthTracker
-from rag_authz.identity import IdentityPassthrough, IdentityResolver, PrincipalMapper
-from rag_authz.model import (
+from tuplegate.connectors._http import ConnectorError, SourceHttp
+from tuplegate.connectors._tree import DepthTracker
+from tuplegate.identity import IdentityPassthrough, IdentityResolver, PrincipalMapper
+from tuplegate.model import (
     DeleteNode,
     DocumentContent,
     GroupMembers,

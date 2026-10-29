@@ -5,15 +5,15 @@ import hmac
 
 import pytest
 
-from rag_authz import ids
-from rag_authz.authz.base import Consistency
-from rag_authz.authz.memory import MemoryBackend
-from rag_authz.connectors.github import GitHubConnector, verify_signature
-from rag_authz.identity import MappingResolver
-from rag_authz.index.memory import MemoryIndex
-from rag_authz.sync import SyncEngine
-from rag_authz.testing import HashingEmbedder
 from tests.fakes import IDENTITIES, FakeGitHub, FakeRepo
+from tuplegate import ids
+from tuplegate.authz.base import Consistency
+from tuplegate.authz.memory import MemoryBackend
+from tuplegate.connectors.github import GitHubConnector, verify_signature
+from tuplegate.identity import MappingResolver
+from tuplegate.index.memory import MemoryIndex
+from tuplegate.sync import SyncEngine
+from tuplegate.testing import HashingEmbedder
 
 World = tuple[FakeGitHub, GitHubConnector, SyncEngine, MemoryBackend, MemoryIndex]
 
