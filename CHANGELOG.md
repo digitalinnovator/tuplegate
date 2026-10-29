@@ -15,5 +15,7 @@ First release. Everything below is new. The project was developed under the work
 - **Sync engine:** per-object diffs, tuples before chunks, reconcile with a guarded sweep, an expiry sweep and lag metrics.
 - **Sidecar:** `POST /v1/retrieve` with caller tokens, fail-closed errors and per-decision audit records (with the caller); `tuplegate serve`; a container image (`deploy/Dockerfile`, non-root, digest-pinned bases).
 - **Integrations:** LangChain and LlamaIndex retrievers bound to one subject.
-- **Validation:** the GitHub connector matched GitHub's own permission endpoint on all 224 person × repository pairs of a real organisation (`scripts/validate_github.py`).
+- **Validation:**
+  - The GitHub connector matched GitHub's own permission endpoint on all 224 person × repository pairs of a real organisation (`scripts/validate_github.py`).
+  - The Confluence connector had 0 over-grants on 156 pairs against Confluence's permission check on a real site (`scripts/validate_confluence.py`). That run found, and this release fixes, an e-mail lookup that real sites refuse.
 - **Benchmarks:** filtering strategies under skew, revocation lag and revoke cost, sidecar overhead. All committed with their results.

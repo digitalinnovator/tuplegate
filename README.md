@@ -4,7 +4,7 @@ Sync Google Drive, GitHub and Confluence permissions into OpenFGA or SpiceDB, an
 
 ![Two users ask the same question and get different answers; one loses access and the answer changes](docs/demo.gif)
 
-> **Status: v0.1, pre-release, local development only.** The GitHub connector has been validated on a real organisation. Drive and Confluence are tested against fake APIs built from the documented response shapes (see [Limitations](#limitations)).
+> **Status: v0.1, pre-release, local development only.** The GitHub and Confluence connectors have been validated against real tenants. Confluence view restrictions and the Drive connector are tested against fake APIs built from the documented response shapes (see [Limitations](#limitations)).
 
 ## Benchmark
 
@@ -146,7 +146,8 @@ Sources and caveats: [docs/research](docs/research/).
 
 ## Limitations
 
-- **Drive and Confluence are untested against real tenants.** They are built from Google's and Atlassian's documented response shapes and tested against fakes of those shapes.
+- **Drive is untested against a real tenant.** It is built from Google's documented response shapes and tested against a fake of them.
+- **Confluence has been validated on a real site:** 0 over-grants on 156 user and group × page pairs against Confluence's own permission check ([note](docs/research/2026-10-29-confluence-real-site.md)). That site was on the Free plan, which forbids view restrictions, so the intersective restriction rule is still tested only against the fake API.
 - **GitHub has been validated on a real organisation:** all 224 person × repository pairs matched GitHub's own permission endpoint ([note](docs/research/2026-10-29-github-real-org.md)). Nested teams and webhooks are still tested only against the fake API.
 - **The OpenFGA list deadline setting must match the server.** OpenFGA ends a list at its deadline silently, so set `TUPLEGATE_OPENFGA_LIST_DEADLINE_S` to the server's `OPENFGA_LIST_OBJECTS_DEADLINE`, or truncated lists will be reported as complete. That loses recall, never safety ([note](docs/research/2026-10-29-list-deadlines.md)).
 - **The sidecar trusts its caller to name the end user.** Callers authenticate with tokens, but end-user OIDC verification is on the roadmap.

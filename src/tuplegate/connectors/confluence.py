@@ -161,6 +161,8 @@ class ConfluenceConnector:
         self._access_class_groups = dict(access_class_groups or {})
         self._include_content = include_content
         self._emails: dict[str, str] = {}
+        self._no_email: set[str] = set()
+        self._bulk_email = True
         self.stats = ConfluenceStats()
         self._depth: DepthTracker | None = None
 
@@ -212,21 +214,54 @@ class ConfluenceConnector:
     # --- principals ------------------------------------------------------------------------
 
     def _lookup_emails(self, account_ids: Collection[str]) -> None:
-        missing = [a for a in account_ids if a not in self._emails]
-        for i in range(0, len(missing), 100):
-            batch = missing[i : i + 100]
-            r = self._http.get(
-                f"{self._base}/wiki/rest/api/user/email/bulk", [("accountId", a) for a in batch]
-            )
-            if r.status_code in (401, 403, 404):
+        """Fill in e-mails for accounts we have not seen one for yet.
+
+        The bulk call needs an approved Connect app; with an ordinary API token Confluence
+        refuses it with HTTP 400 ("only available to approved Connect apps"), measured on a
+        real site on 2026-10-29. Then each account is looked up on its own, which returns the
+        e-mail when the person's profile visibility allows it. App and bot accounts have none
+        and stay unmapped.
+        """
+        missing = [a for a in dict.fromkeys(account_ids) if a not in self._emails]
+        missing = [a for a in missing if a not in self._no_email]
+        if not missing:
+            return
+        if self._bulk_email:
+            for i in range(0, len(missing), 100):
+                batch = missing[i : i + 100]
+                r = self._http.get(
+                    f"{self._base}/wiki/rest/api/user/email/bulk", [("accountId", a) for a in batch]
+                )
+                if 400 <= r.status_code < 500:
+                    log.info(
+                        "bulk e-mail lookup refused (HTTP %s); looking up one by one", r.status_code
+                    )
+                    self._bulk_email = False
+                    break
+                if r.status_code >= 400:
+                    raise ConnectorError(f"email bulk: HTTP {r.status_code}", r.status_code)
+                for row in r.json():
+                    if row.get("email"):
+                        self._emails[row["accountId"]] = row["email"]
+            else:
+                self._no_email.update(a for a in missing if a not in self._emails)
+                return
+        for a in missing:
+            r = self._http.get(f"{self._base}/wiki/rest/api/user", {"accountId": a})
+            if r.status_code == 404:
+                self._no_email.add(a)
+                continue
+            if r.status_code in (401, 403):
                 log.warning("e-mail lookup not permitted; use an identity map")
                 self._resolve_emails = False
                 return
             if r.status_code >= 400:
-                raise ConnectorError(f"email bulk: HTTP {r.status_code}", r.status_code)
-            for row in r.json():
-                if row.get("email"):
-                    self._emails[row["accountId"]] = row["email"]
+                raise ConnectorError(f"user {a}: HTTP {r.status_code}", r.status_code)
+            email = r.json().get("email")
+            if email:
+                self._emails[a] = email
+            else:
+                self._no_email.add(a)
 
     def _user(self, mapper: PrincipalMapper, account_id: str) -> SubjectRef:
         if self._resolve_emails and account_id not in self._emails:

@@ -197,3 +197,11 @@ def test_unexpected_restriction_shape_fails_instead_of_opening() -> None:
     fc._handle = handle  # type: ignore[method-assign]
     with pytest.raises(ConnectorError, match="unexpected restriction"):
         _tuples(_connector(fc, access_class_groups=STAND_IN))
+
+
+def test_bulk_email_refused_falls_back_to_per_account_lookups() -> None:
+    conn = _connector(FakeConfluence(bulk_email_refused=True), access_class_groups=STAND_IN)
+    o = Oracle(_tuples(conn))
+    for u, pages in EXPECTED.items():
+        assert _visible(o, u) == pages, u
+    assert conn.stats.unmapped_principals == 1  # a-dave still has no visible e-mail

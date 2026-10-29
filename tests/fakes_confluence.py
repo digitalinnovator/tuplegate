@@ -106,6 +106,7 @@ class FakeConfluence:
     modified: list[str] = field(default_factory=list)
     page_size: int = 2
     email_lookup_allowed: bool = True
+    bulk_email_refused: bool = False
 
     def client(self) -> httpx.Client:
         return httpx.Client(transport=httpx.MockTransport(self._handle))
@@ -159,6 +160,11 @@ class FakeConfluence:
             rows = [{"type": "known", "accountId": a, "email": ""} for a in self.groups[m.group(1)]]
             return self._v1_page(req, rows)
         if path == "/wiki/rest/api/user/email/bulk":
+            if self.bulk_email_refused:
+                # What a real site answers an ordinary API token (measured 2026-10-29).
+                return httpx.Response(
+                    400, json={"message": "This API is only available to approved Connect apps"}
+                )
             if not self.email_lookup_allowed:
                 return httpx.Response(403)
             return httpx.Response(
@@ -169,6 +175,11 @@ class FakeConfluence:
                     if a in EMAILS
                 ],
             )
+        if path == "/wiki/rest/api/user":
+            if not self.email_lookup_allowed:
+                return httpx.Response(403)
+            a = q.get("accountId", [""])[0]
+            return httpx.Response(200, json={"accountId": a, "email": EMAILS.get(a, "")})
         if path == "/wiki/api/v2/spaces":
             return self._v2_page(
                 req,
