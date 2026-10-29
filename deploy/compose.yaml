@@ -4,6 +4,7 @@
 #
 #   make up        postgres (pgvector) + openfga        — the vertical slice
 #   make up-full   adds spicedb + qdrant                — every backend
+#   make sidecar   adds the sidecar image on :58089     — needs RAG_AUTHZ_CALLERS
 name: rag-authz
 
 x-pg-dsn: &openfga_dsn postgres://rag:rag-dev-only@postgres:5432/openfga?sslmode=disable
@@ -97,3 +98,18 @@ services:
       interval: 2s
       timeout: 3s
       retries: 30
+
+  sidecar:
+    profiles: [sidecar]
+    build: { context: .., dockerfile: deploy/Dockerfile }
+    image: rag-authz:dev
+    environment:
+      # Empty means the sidecar refuses to start (see `rag-authz hash-token NAME`).
+      RAG_AUTHZ_CALLERS: ${RAG_AUTHZ_CALLERS:-}
+      RAG_AUTHZ_DIM: ${RAG_AUTHZ_DIM:-256}
+      RAG_AUTHZ_STRATEGY: ${RAG_AUTHZ_STRATEGY:-cached_pre_filter}
+      RAG_AUTHZ_OPENFGA_URL: http://openfga:8080
+      RAG_AUTHZ_PG_DSN: postgresql://rag:rag-dev-only@postgres:5432/rag
+    ports: ["127.0.0.1:58089:8089"]
+    depends_on:
+      openfga: { condition: service_healthy }

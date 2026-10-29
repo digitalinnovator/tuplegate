@@ -50,6 +50,11 @@ llamaindex = [
 rag-authz = "rag_authz.cli:app"
 
 [dependency-groups]
+# Only the sidecar image installs this: a self-contained libpq, so the image needs no system
+# packages. Library users choose psycopg's binary or system-libpq build themselves.
+image = [
+    "psycopg[binary]==3.3.6",
+]
 dev = [
     "hypothesis==6.168.1",
     "mypy==2.3.1",

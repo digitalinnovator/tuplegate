@@ -13,6 +13,7 @@ First release. Everything below is new.
   - Google Drive, with shared drives, limited-access folders, link-only and metadata-only grants, Directory groups and the Changes API;
   - Confluence Cloud, with all three space-access modes, intersective view restrictions and CQL change detection.
 - **Sync engine:** per-object diffs, tuples before chunks, reconcile with a guarded sweep, an expiry sweep and lag metrics.
-- **Sidecar:** `POST /v1/retrieve` with caller tokens, fail-closed errors and per-decision audit records (with the caller); `rag-authz serve`.
+- **Sidecar:** `POST /v1/retrieve` with caller tokens, fail-closed errors and per-decision audit records (with the caller); `rag-authz serve`; a container image (`deploy/Dockerfile`, non-root, digest-pinned bases).
 - **Integrations:** LangChain and LlamaIndex retrievers bound to one subject.
+- **Validation:** the GitHub connector matched GitHub's own permission endpoint on all 224 person × repository pairs of a real organisation (`scripts/validate_github.py`).
 - **Benchmarks:** filtering strategies under skew, revocation lag and revoke cost, sidecar overhead. All committed with their results.

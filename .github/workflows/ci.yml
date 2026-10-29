@@ -50,3 +50,13 @@ jobs:
       - run: uv run pytest -m integration -v
       - if: failure()
         run: docker compose -f deploy/compose.yaml logs --no-color | tail -200
+
+  image:
+    # Builds the sidecar image from uv.lock to keep the Dockerfile honest. Never pushed.
+    name: sidecar image (build only)
+    runs-on: ubuntu-24.04
+    needs: check
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: docker build -f deploy/Dockerfile -t rag-authz:ci .
+      - run: docker run --rm --entrypoint rag-authz rag-authz:ci version

@@ -4,7 +4,7 @@ Sync Google Drive, GitHub and Confluence permissions into OpenFGA or SpiceDB, an
 
 ![Two users ask the same question and get different answers; one loses access and the answer changes](docs/demo.gif)
 
-> **Status: v0.1, pre-release, local development only.** Every connector is tested against a fake API built from the documented response shapes, not yet against a real tenant (see [Limitations](#limitations)).
+> **Status: v0.1, pre-release, local development only.** The GitHub connector has been validated on a real organisation. Drive and Confluence are tested against fake APIs built from the documented response shapes (see [Limitations](#limitations)).
 
 ## Benchmark
 
@@ -75,6 +75,8 @@ export RAG_AUTHZ_CALLERS=chat-app:<sha256> RAG_AUTHZ_DIM=768
 uv run rag-authz serve                      # POST /v1/retrieve {"subject", "vector", "k"}
 ```
 
+Or as a container on the dev stack: `RAG_AUTHZ_CALLERS=chat-app:<sha256> make sidecar` (image: `deploy/Dockerfile`, built from `uv.lock`, non-root, base images pinned by digest).
+
 ### Syncing a source
 
 ```sh
@@ -144,7 +146,9 @@ Sources and caveats: [docs/research](docs/research/).
 
 ## Limitations
 
-- **Connectors are untested against real tenants.** They are built from Atlassian's, Google's and GitHub's documented response shapes and tested against fakes of those shapes. The first real-tenant runs are the top roadmap item.
+- **Drive and Confluence are untested against real tenants.** They are built from Google's and Atlassian's documented response shapes and tested against fakes of those shapes.
+- **GitHub has been validated on a real organisation:** all 224 person × repository pairs matched GitHub's own permission endpoint ([note](docs/research/2026-10-29-github-real-org.md)). Nested teams and webhooks are still tested only against the fake API.
+- **The OpenFGA list deadline setting must match the server.** OpenFGA ends a list at its deadline silently, so set `RAG_AUTHZ_OPENFGA_LIST_DEADLINE_S` to the server's `OPENFGA_LIST_OBJECTS_DEADLINE`, or truncated lists will be reported as complete. That loses recall, never safety ([note](docs/research/2026-10-29-list-deadlines.md)).
 - **The sidecar trusts its caller to name the end user.** Callers authenticate with tokens, but end-user OIDC verification is on the roadmap.
 - **Some changes only converge on reconcile,** because the sources publish no feed for them:
   - GitHub base-permission changes;

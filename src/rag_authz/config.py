@@ -20,9 +20,13 @@ class Settings(BaseModel):
     openfga_url: str = "http://127.0.0.1:58080"
     openfga_store: str = "rag-authz"
     openfga_token: str | None = None
+    # Must equal the server's OPENFGA_LIST_OBJECTS_DEADLINE: OpenFGA ends the stream silently
+    # at its deadline, and this value is how a truncated list is recognised.
+    openfga_list_deadline_s: float = 3.0
     spicedb_endpoint: str = "127.0.0.1:55051"
     spicedb_token: str | None = None
     spicedb_insecure: bool = False
+    spicedb_list_deadline_s: float = 3.0
     index: Literal["pgvector", "qdrant"] = "pgvector"
     dim: int = Field(default=0, ge=0, description="embedding dimension; required for the index")
     pg_dsn: str = "postgresql://rag:rag-dev-only@127.0.0.1:55432/rag"
@@ -63,13 +67,23 @@ def build_engine(s: Settings) -> AuthzBackend:
     if s.engine == "openfga":
         from rag_authz.authz.openfga import OpenFGABackend
 
-        b: AuthzBackend = OpenFGABackend(s.openfga_url, s.openfga_store, api_token=s.openfga_token)
+        b: AuthzBackend = OpenFGABackend(
+            s.openfga_url,
+            s.openfga_store,
+            api_token=s.openfga_token,
+            list_deadline_s=s.openfga_list_deadline_s,
+        )
     else:
         from rag_authz.authz.spicedb import SpiceDBBackend
 
         if not s.spicedb_token:
             raise ValueError("RAG_AUTHZ_SPICEDB_TOKEN is required")
-        b = SpiceDBBackend(s.spicedb_endpoint, s.spicedb_token, insecure=s.spicedb_insecure)
+        b = SpiceDBBackend(
+            s.spicedb_endpoint,
+            s.spicedb_token,
+            insecure=s.spicedb_insecure,
+            list_deadline_s=s.spicedb_list_deadline_s,
+        )
     b.ensure_schema()
     return b
 

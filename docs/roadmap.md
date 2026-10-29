@@ -14,7 +14,7 @@ The v0.1 scope comes from the project brief. Anything outside it waits under "La
 | pgvector adapter (iterative scans) | Done. Integration tests pass |
 | Qdrant adapter (REST, keyword index on `acl_id`, `MatchAny`, ACORN arm) | Done. Integration tests pass |
 | Retrieval strategies: pre-filter, post-filter, iterative, cached pre-filter, plus the gated unfiltered baseline | Done. Every strategy × engine × index is leak-free in `tests/integration/test_leak_matrix.py`. An adaptive strategy was built, measured and rejected (ADR-0004) |
-| GitHub connector, with webhooks and signature verification | Done against a fake API. Not yet run against a real org |
+| GitHub connector, with webhooks and signature verification | Done. Validated on a real org: 224/224 pairs agree with GitHub (2026-10-29). Webhooks and nested teams tested against the fake API |
 | Google Drive connector (shared drives, limited access, link-only, metadata-only, expirations, Directory nesting incl. `CUSTOMER`, Changes API) | Done against a fake API. Not yet run against a real tenant |
 | Confluence connector (all three space-access modes, intersective restrictions, folders as parents, access classes fail closed, CQL changes) | Done against a fake API. Not yet run against a real site |
 | Sync engine (per-object diff, tuples before chunks, reconcile plus guarded sweep, expiry sweep, lag samples) | Done |
@@ -37,10 +37,14 @@ Closed on 2026-10-28:
   - Pinned in tests (docs/research/2026-10-28-resolution-depth.md).
 - **OpenFGA stored-model shape.** `_same_model` ignores server defaults. An integration test proves the model is reused.
 
+Closed on 2026-10-29:
+
+- **Streamed ListObjects deadline behaviour.** It ends silently with HTTP 200 and no error line. `list_deadline_s` must match the server (docs/research/2026-10-29-list-deadlines.md).
+- **GitHub connector on a real org.** All 224 person × repository pairs matched GitHub's own permission endpoint (docs/research/2026-10-29-github-real-org.md).
+
 Still open:
 
-- **Connectors against real tenants.** Every connector is tested against a fake API built from the documented response shapes. A run against a real GitHub org, Workspace tenant and Confluence site is the first post-v0.1 task, and the results go into the research notes.
-- **Streamed ListObjects deadline behaviour.** Confirm that a stream cut off at the deadline ends without an error line. This is why `list_complete` uses elapsed time.
+- **Drive and Confluence against real tenants.** Both are tested only against fake APIs built from the documented response shapes. GitHub has been validated on a real org; nested teams and webhooks there are still fake-only.
 - **GitHub repo teams.** Find out whether `GET /repos/{o}/{r}/teams` lists child teams that inherit access. We model nesting ourselves either way.
 - **Confluence ids.** Confirm the root-page `parentId` representation on a live site. The connector treats empty, `null` and `"0"` as the space root.
 

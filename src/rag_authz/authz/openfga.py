@@ -5,7 +5,10 @@ Verified against OpenFGA v1.21.0 (docs/research/2026-09-27-engines-and-vector-st
 - ``write`` is transactional, max 100 tuples per request by default.
 - ``batch-check`` takes at most 50 checks per request by default.
 - ``streamed-list-objects`` has no result cap but stops silently at the server deadline
-  (default 3s), so a list that ran close to the deadline is reported as incomplete.
+  (default 3s): HTTP 200, no error line, just fewer results (measured 2026-10-29). A list that
+  ran close to the deadline is therefore reported as incomplete, which only works when
+  ``list_deadline_s`` equals the server's ``OPENFGA_LIST_OBJECTS_DEADLINE``. A shorter server
+  deadline makes truncated lists look complete: lost recall, never a leak.
 """
 
 from __future__ import annotations

@@ -1,4 +1,4 @@
-.PHONY: dev check test integration up up-full down schema bench-smoke bench bench-matrix bench-followups bench-summary bench-lag bench-sidecar demo
+.PHONY: dev check test integration up up-full down schema bench-smoke bench bench-matrix bench-followups bench-summary bench-lag bench-sidecar demo image sidecar
 
 COMPOSE := docker compose -f deploy/compose.yaml
 
@@ -61,3 +61,10 @@ bench-sidecar:
 # Two users, one question, a revoke: the README demo.
 demo:
 	uv run python examples/demo.py
+
+# The sidecar image (no push), and the sidecar on the dev stack at 127.0.0.1:58089.
+image:
+	docker build -f deploy/Dockerfile -t rag-authz:dev .
+
+sidecar:
+	$(COMPOSE) --profile sidecar up -d --build --wait sidecar
