@@ -45,7 +45,7 @@ Closed on 2026-10-29:
 
 Still open:
 
-- **Drive against a real tenant.** It is tested only against a fake API built from the documented response shapes.
+- **Drive against a real tenant.** It is tested only against a fake API built from the documented response shapes. A real run needs a Google Workspace tenant with admin rights, because shared drives and the Directory API do not exist for personal Google accounts. A Cloud project alone cannot stand in. The plan mirrors the other connectors: a fixture (shared drive, limited-access folder, link-only and domain sharing, an expiring grant, nested groups), with Drive itself as the referee by impersonating each test user through domain-wide delegation.
 - **GitHub nested teams and webhooks** are still tested only against the fake API.
 - **GitHub repo teams.** Find out whether `GET /repos/{o}/{r}/teams` lists child teams that inherit access. We model nesting ourselves either way.
 
