@@ -4,7 +4,7 @@ Sync Google Drive, GitHub and Confluence permissions into OpenFGA or SpiceDB, an
 
 ![Two users ask the same question and get different answers; one loses access and the answer changes](docs/demo.gif)
 
-> **Status: v0.1, pre-release, local development only.** The GitHub and Confluence connectors have been validated against real tenants, including Confluence's nested view restrictions. The Drive connector is tested against a fake API built from Google's documented response shapes (see [Limitations](#limitations)).
+> **Status: v0.1.0, pre-alpha.** The GitHub and Confluence connectors have been validated against real tenants, including Confluence's nested view restrictions. The Drive connector is tested against a fake API built from Google's documented response shapes (see [Limitations](#limitations)).
 
 ## Benchmark
 
